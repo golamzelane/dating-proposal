@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>What are we feeling? 🍽️✨</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
+    }
+
+    body {
+      background-color: #fce4ec;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      padding: 14px 10px 30px 10px;
+      position: relative;
+    }
+
+    .toast-alert {
+      position: fixed;
+      top: -70px;
+      background-color: #ff4757;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(255, 71, 87, 0.35);
+      transition: top 0.4s ease, opacity 0.4s ease;
+      opacity: 0;
+      z-index: 1000;
+      pointer-events: none;
+      text-align: center;
+      max-width: 90%;
+    }
+
+    .toast-alert.show {
+      top: 15px;
+      opacity: 1;
+    }
+
+    .card {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 390px;
+      padding: 16px 14px;
+      border-radius: 22px;
+      box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      animation: popIn 0.35s ease-out forwards;
+      margin: auto;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .image-container {
+      width: 95px;
+      height: 95px;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      border: 3px solid #f8bbd0;
+      flex-shrink: 0;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .title {
+      font-size: 1.15rem;
+      color: #ad1457;
+      font-weight: 800;
+      margin-bottom: 2px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 0.78rem;
+      color: #747d8c;
+      margin-bottom: 10px;
+    }
+
+    /* 4x4 Balanced Responsive Grid */
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
+    .food-card {
+      background: #fffafc;
+      border: 1.5px solid #f8bbd0;
+      border-radius: 12px;
+      padding: 6px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+      min-height: 52px;
+    }
+
+    .food-emoji {
+      font-size: 1.35rem;
+      margin-bottom: 2px;
+    }
+
+    .food-name {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #2f3542;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .food-card:active {
+      transform: scale(0.93);
+    }
+
+    .food-card.selected {
+      background-color: #fce4ec;
+      border-color: #ec407a;
+      transform: scale(1.03);
+      box-shadow: 0 3px 8px rgba(236, 64, 122, 0.25);
+    }
+
+    .food-card.selected .food-name {
+      color: #ad1457;
+    }
+
+    .btn-done {
+      width: 100%;
+      background-color: #f48fb1;
+      color: white;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(244, 143, 177, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-done:hover {
+      background-color: #ec407a;
+      transform: translateY(-2px);
+    }
+
+    .btn-done:disabled {
+      background-color: #d1d8e0;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 6px;
+      font-size: 0.72rem;
+      color: #c2185b;
+      opacity: 0.75;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toast-alert" id="topAlert">⚠️ Error Message</div>
+
+  <div class="card" id="foodCard">
+    <!-- img4 Image Added Above Title -->
+    <div class="image-container">
+      <img src="image_folder/img4.jpg" alt="Vibes Picker" onerror="this.src='image_folder/img4.jpeg'" />
+    </div>
+
+    <div class="title">What are we feeling? 🍽️✨</div>
+    <div class="subtitle">pick your vibes (select 1 or more)</div>
+
+    <!-- 16 Food & Drinks Options (4x4) -->
+    <div class="food-grid" id="foodGrid">
+      <div class="food-card" onclick="toggleFood(this, 'Pizza 🍕')">
+        <span class="food-emoji">🍕</span>
+        <span class="food-name">Pizza</span>
+      </div>
+      <div class="food-card" onclick="toggleFood(this, 'Sushi 🍣')">
+        <span class="food-emoji">🍣</span>
+        <span class="food-name">Sushi</span>
+      </div>
+      <div class="food-card" onclick="toggleFood(this, 'Burgers 🍔')">
+        <span class="food-emoji">🍔</span>
+        <span class="food-name">Burger</span>
+      </div>
+      <div class="food-card" onclick="toggleFood(this, 'Pasta 🍝')">
+        <span class="food-emoji">🍝</span>
+        <span class="food-name">Pasta</span>
+      </div>
+
+      <div class="food-card" onclick="toggleFood(this, 'Tacos 🌮')">
+        <span class="food-emoji">🌮</span>
+        <span class="food-name">Tacos</span>
+      </div>
+      <div class="food-card" onclick="toggleFood(this, 'Ramen 🍜')">
+        <span class="food-emoji">🍜</span>
+        <span class="food-name">Ramen</span>
+      </div>
+      <div class="food-card" onclick="toggleFood(this, 'Hot Coffee ☕')">
+        <span class="food-emoji">☕</span>
+        <span class="food-name">Hot Coffee</span>
+      </div>
+      <div class="food-card" onclick="toggleFood(this, 'Cold Coffee 🧋')">
+        <span class="food-emoji">🧋</span>
+        <span class="food-name">Cold Coffee</span>
+      </div>
+
+      <div class="food-card" onclick="toggleFood(this, 'Milk Tea 🫖')">
+        <span class="food-emoji">🫖</span>
+        <span class="food-name">Milk Tea</span>
+      </div>
+      <div class="food-card" onclick="toggleFood(this, 'Cold Drink 🥤')">
+        <span class="food-emoji">🥤</span>
+        <span class="food-name">Cold Drink</span>
+      </div>
+      <div class="food-card" onclick="toggleFood(this, 'Lassi 🥛')">
+        <span class="food-emoji">🥛</span>
+        <span class="food-name">Lassi</span>
+      </div>
+      <div class="food-card" onclick="toggleFood(this, 'Ice Cream 🍨')">
+        <span class="food-emoji">🍨</span>
+        <span class="food-name">Ice Cream</span>
+      </div>
+
+      <div class="food-card" onclick="toggleFood(this, 'Biryani 🍗')">
+        <span class="food-emoji">🍗</span>
+        <span class="food-name">Biryani</span>
+      </div>
+      <div class="food-card" onclick="toggleFood(this, 'Dessert 🍰')">
+        <span class="food-emoji">🍰</span>
+        <span class="food-name">Dessert</span>
+      </div>
+      <div class="food-card" onclick="toggleFood(this, 'Waffles 🧇')">
+        <span class="food-emoji">🧇</span>
+        <span class="food-name">Waffles</span>
+      </div>
+      <div class="food-card" onclick="toggleFood(this, 'Fries 🍟')">
+        <span class="food-emoji">🍟</span>
+        <span class="food-name">Fries</span>
+      </div>
+    </div>
+
+    <button class="btn-done" id="doneBtn" onclick="submitFinalData()">DONE! 💖</button>
+  </div>
+
+  <div class="footer">Designed & Developed by PRANTO</div>
+
+  <script>
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXvf-yZYeFd4NYQ22W75vLpKF7XO2z4tqTu_rSMJWsRkj5D4oY5yY5XqLpTcgMHIRc9Q/exec';
+    let selectedFoods = [];
+
+    function showAlert(msg) {
+      const alertBox = document.getElementById('topAlert');
+      alertBox.innerText = msg;
+      alertBox.classList.add('show');
+      setTimeout(() => alertBox.classList.remove('show'), 3000);
+    }
+
+    function toggleFood(element, foodName) {
+      if (element.classList.contains('selected')) {
+        element.classList.remove('selected');
+        selectedFoods = selectedFoods.filter(item => item !== foodName);
+      } else {
+        element.classList.add('selected');
+        selectedFoods.push(foodName);
+      }
+    }
+
+    function submitFinalData() {
+      if (selectedFoods.length === 0) {
+        showAlert('⚠️ Please select at least 1 food or drink vibe!');
+        return;
+      }
+
+      const doneBtn = document.getElementById('doneBtn');
+      doneBtn.disabled = true;
+      doneBtn.innerText = 'Confirming... 💌';
+
+      const partner = localStorage.getItem('partnerName') || 'Partner';
+      const inviter = localStorage.getItem('inviterName') || 'Someone Special';
+      const date = localStorage.getItem('datingDate') || 'TBD';
+      const time = localStorage.getItem('datingTime') || 'TBD';
+      const place = localStorage.getItem('datingPlace') || 'TBD';
+      const email = localStorage.getItem('receiverEmail') || 'golamzelane009@gmail.com';
+      const foodText = selectedFoods.join(', ');
+
+      localStorage.setItem('datingFood', foodText);
+
+      const formData = new URLSearchParams();
+      formData.append('partnerName', partner);
+      formData.append('inviterName', inviter);
+      formData.append('date', date);
+      formData.append('time', time);
+      formData.append('place', place);
+      formData.append('food', foodText);
+      formData.append('email', email);
+
+      confetti({ particleCount: 110, spread: 75, origin: { y: 0.6 } });
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData.toString()
+      });
+
+      setTimeout(() => {
+        window.location.href = 'page5.html';
+      }, 500);
+    }
+  </script>
+</body>
+</html>

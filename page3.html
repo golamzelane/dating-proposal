@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Pick Date, Time & Place 🗓️</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
+    }
+
+    body {
+      background-color: #fce4ec;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      padding: 12px;
+      position: relative;
+    }
+
+    .toast-alert {
+      position: fixed;
+      top: -70px;
+      background-color: #ff4757;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(255, 71, 87, 0.35);
+      transition: top 0.4s ease, opacity 0.4s ease;
+      opacity: 0;
+      z-index: 1000;
+      pointer-events: none;
+      text-align: center;
+      max-width: 90%;
+    }
+
+    .toast-alert.show {
+      top: 15px;
+      opacity: 1;
+    }
+
+    .card {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 380px;
+      padding: 24px 18px;
+      border-radius: 24px;
+      box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      animation: popIn 0.35s ease-out forwards;
+      margin: auto;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .image-container {
+      width: 110px;
+      height: 110px;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      border: 3px solid #f8bbd0;
+      flex-shrink: 0;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .title {
+      font-size: 1.2rem;
+      color: #ad1457;
+      font-weight: 800;
+      margin-bottom: 15px;
+      line-height: 1.35;
+    }
+
+    .form-group {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 12px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      color: #747d8c;
+      font-weight: bold;
+      margin-bottom: 4px;
+      margin-left: 4px;
+    }
+
+    .date-row {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .custom-select-box {
+      position: relative;
+      flex: 1;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      border: 2px solid #f8bbd0;
+      border-radius: 14px;
+      outline: none;
+      color: #2f3542;
+      background-color: #fffafc;
+      font-weight: 600;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .input-field:focus {
+      border-color: #ec407a;
+    }
+
+    .dropdown-list {
+      position: absolute;
+      top: 105%;
+      left: 0;
+      width: 100%;
+      max-height: 140px;
+      background: #ffffff;
+      border: 2px solid #f8bbd0;
+      border-radius: 12px;
+      overflow-y: auto;
+      display: none;
+      z-index: 500;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      list-style: none;
+    }
+
+    .dropdown-list.open {
+      display: block;
+    }
+
+    .dropdown-list li {
+      padding: 7px;
+      font-size: 0.85rem;
+      color: #2f3542;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .dropdown-list li:hover {
+      background-color: #fce4ec;
+      color: #ad1457;
+      font-weight: bold;
+    }
+
+    select.input-field {
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='%23ec407a' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 14px;
+    }
+
+    .btn-set {
+      width: 100%;
+      background-color: #f48fb1;
+      color: white;
+      padding: 12px 18px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 6px;
+      box-shadow: 0 4px 12px rgba(244, 143, 177, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-set:hover {
+      background-color: #ec407a;
+      transform: translateY(-2px);
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 8px;
+      font-size: 0.75rem;
+      color: #c2185b;
+      opacity: 0.75;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toast-alert" id="topAlert">⚠️ Error Message</div>
+
+  <div class="card">
+    <div class="image-container">
+      <img src="image_folder/img3.jpg" alt="Date Picker" onerror="this.src='image_folder/img3.jpeg'" />
+    </div>
+
+    <div class="title">So... when are you free? 🗓️</div>
+
+    <div class="form-group">
+      <label class="form-label">Pick / Type Date 📅</label>
+      <div class="date-row">
+        <div class="custom-select-box">
+          <input type="number" id="dayInput" class="input-field text-center" placeholder="DD" autocomplete="off" oninput="handleLimit(this, 2)" onclick="toggleList('dayList')" />
+          <ul class="dropdown-list" id="dayList"></ul>
+        </div>
+        <div class="custom-select-box">
+          <input type="number" id="monthInput" class="input-field text-center" placeholder="MM" autocomplete="off" oninput="handleLimit(this, 2)" onclick="toggleList('monthList')" />
+          <ul class="dropdown-list" id="monthList"></ul>
+        </div>
+        <div class="custom-select-box" style="flex: 1.2;">
+          <input type="number" id="yearInput" class="input-field text-center" placeholder="YYYY" autocomplete="off" oninput="handleLimit(this, 4)" onclick="toggleList('yearList')" />
+          <ul class="dropdown-list" id="yearList"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="timeSelect">What Time? ⏰</label>
+      <select id="timeSelect" class="input-field text-center">
+        <option value="" disabled selected>Select a time...</option>
+        <option value="10:00 AM">10:00 AM</option>
+        <option value="11:00 AM">11:00 AM</option>
+        <option value="12:00 PM">12:00 PM</option>
+        <option value="01:00 PM">01:00 PM</option>
+        <option value="02:00 PM">02:00 PM</option>
+        <option value="03:00 PM">03:00 PM</option>
+        <option value="04:00 PM">04:00 PM</option>
+        <option value="05:00 PM">05:00 PM</option>
+        <option value="06:00 PM">06:00 PM</option>
+        <option value="07:00 PM">07:00 PM</option>
+        <option value="08:00 PM">08:00 PM</option>
+        <option value="09:00 PM">09:00 PM</option>
+        <option value="10:00 PM">10:00 PM</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="placeInput">Where are we going? 📍</label>
+      <input type="text" id="placeInput" class="input-field" placeholder="e.g. Interlaken, Switzerland" autocomplete="off" />
+    </div>
+
+    <button class="btn-set" onclick="submitDate()">set the date! 💖</button>
+  </div>
+
+  <div class="footer">Designed & Developed by PRANTO</div>
+
+  <script>
+    const dayList = document.getElementById('dayList');
+    const monthList = document.getElementById('monthList');
+    const yearList = document.getElementById('yearList');
+
+    const dayInput = document.getElementById('dayInput');
+    const monthInput = document.getElementById('monthInput');
+    const yearInput = document.getElementById('yearInput');
+    const placeInput = document.getElementById('placeInput');
+
+    for (let i = 1; i <= 31; i++) {
+      const val = i < 10 ? `0${i}` : `${i}`;
+      const li = document.createElement('li');
+      li.innerText = val;
+      li.onclick = () => { dayInput.value = val; closeAllLists(); };
+      dayList.appendChild(li);
+    }
+
+    for (let i = 1; i <= 12; i++) {
+      const val = i < 10 ? `0${i}` : `${i}`;
+      const li = document.createElement('li');
+      li.innerText = val;
+      li.onclick = () => { monthInput.value = val; closeAllLists(); };
+      monthList.appendChild(li);
+    }
+
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear; y <= currentYear + 50; y++) {
+      const li = document.createElement('li');
+      li.innerText = y;
+      li.onclick = () => { yearInput.value = y; closeAllLists(); };
+      yearList.appendChild(li);
+    }
+
+    function toggleList(id) {
+      const target = document.getElementById(id);
+      const isOpen = target.classList.contains('open');
+      closeAllLists();
+      if (!isOpen) target.classList.add('open');
+    }
+
+    function closeAllLists() {
+      document.querySelectorAll('.dropdown-list').forEach(el => el.classList.remove('open'));
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.custom-select-box')) closeAllLists();
+    });
+
+    function handleLimit(input, maxDigits) {
+      if (input.value.length > maxDigits) input.value = input.value.slice(0, maxDigits);
+    }
+
+    function showAlert(msg) {
+      const alertBox = document.getElementById('topAlert');
+      alertBox.innerText = msg;
+      alertBox.classList.add('show');
+      setTimeout(() => alertBox.classList.remove('show'), 3000);
+    }
+
+    function submitDate() {
+      let d = dayInput.value.trim();
+      let m = monthInput.value.trim();
+      let y = yearInput.value.trim();
+      const time = document.getElementById('timeSelect').value;
+      const place = placeInput.value.trim();
+
+      if (!d || !m || !y || !time) {
+        showAlert('⚠️ Please complete Day, Month, Year & Time!');
+        return;
+      }
+
+      if (parseInt(d) < 1 || parseInt(d) > 31) {
+        showAlert('⚠️ Day must be between 01 and 31!');
+        return;
+      }
+      if (parseInt(m) < 1 || parseInt(m) > 12) {
+        showAlert('⚠️ Month must be between 01 and 12!');
+        return;
+      }
+      if (parseInt(y) < currentYear || y.length !== 4) {
+        showAlert(`⚠️ Year must be 4 digits (from ${currentYear})!`);
+        return;
+      }
+
+      if (place.length < 1) {
+        showAlert('⚠️ Please enter where we are going!');
+        placeInput.focus();
+        return;
+      }
+
+      d = d.padStart(2, '0');
+      m = m.padStart(2, '0');
+
+      localStorage.setItem('datingDate', `${d}/${m}/${y}`);
+      localStorage.setItem('datingTime', time);
+      localStorage.setItem('datingPlace', place);
+
+      // Confetti burst before moving to page4
+      confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+
+      setTimeout(() => {
+        window.location.href = 'page4.html';
+      }, 400);
+    }
+  </script>
+</body>
+</html>

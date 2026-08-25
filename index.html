@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Date Proposal Setup 💖</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
+    }
+
+    body {
+      background-color: #fce4ec;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      padding: 12px;
+      position: relative;
+    }
+
+    .toast-alert {
+      position: fixed;
+      top: -70px;
+      background-color: #ff4757;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(255, 71, 87, 0.35);
+      transition: top 0.4s ease, opacity 0.4s ease;
+      opacity: 0;
+      z-index: 1000;
+      pointer-events: none;
+      text-align: center;
+      max-width: 90%;
+    }
+
+    .toast-alert.show {
+      top: 15px;
+      opacity: 1;
+    }
+
+    .card {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 360px;
+      padding: 24px 18px;
+      border-radius: 24px;
+      box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      animation: popIn 0.35s ease-out forwards;
+      margin: auto;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .info-header {
+      font-size: 0.8rem;
+      color: #747d8c;
+      margin-bottom: 14px;
+      line-height: 1.35;
+      background-color: #fffafc;
+      border: 1px dashed #f8bbd0;
+      padding: 8px 10px;
+      border-radius: 12px;
+      width: 100%;
+      word-break: break-word;
+    }
+
+    .form-group {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 12px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      color: #747d8c;
+      font-weight: bold;
+      margin-bottom: 4px;
+      margin-left: 4px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      border: 2px solid #f8bbd0;
+      border-radius: 14px;
+      outline: none;
+      color: #2f3542;
+      background-color: #fffafc;
+      font-weight: 600;
+    }
+
+    .input-field:focus {
+      border-color: #ec407a;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      font-size: 0.92rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      transition: background-color 0.2s;
+    }
+
+    .btn-yes {
+      background-color: #f48fb1;
+      color: white;
+      box-shadow: 0 4px 10px rgba(244, 143, 177, 0.4);
+      min-width: 100px;
+      transition: transform 0.2s ease, background-color 0.2s;
+    }
+
+    .btn-yes:hover {
+      background-color: #ec407a;
+    }
+
+    .btn-no {
+      background-color: #ce93d8;
+      color: white;
+      box-shadow: 0 4px 10px rgba(206, 147, 216, 0.4);
+      min-width: 80px;
+      max-width: 130px;
+      z-index: 99;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-group {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      height: 70px;
+      margin-top: 6px;
+    }
+
+    .image-container {
+      width: 120px;
+      height: 120px;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      border: 3px solid #f8bbd0;
+      flex-shrink: 0;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .title {
+      font-size: 1.15rem;
+      color: #ad1457;
+      font-weight: bold;
+      margin-bottom: 14px;
+      line-height: 1.35;
+      width: 100%;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .link-box {
+      margin-top: 12px;
+      background: #f1f2f6;
+      padding: 10px;
+      border-radius: 12px;
+      word-break: break-all;
+      font-size: 0.8rem;
+      color: #2f3542;
+      border: 1px dashed #ec407a;
+      user-select: all;
+      width: 100%;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 8px;
+      font-size: 0.75rem;
+      color: #c2185b;
+      opacity: 0.75;
+      user-select: none;
+      text-align: center;
+      width: 100%;
+    }
+
+    #setupCard, #nameCard, #mainCard, #linkResultCard {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toast-alert" id="topAlert">⚠️ Error Message</div>
+
+  <!-- Screen 1: Info Setup Form -->
+  <div class="card" id="setupCard">
+    <div class="title">🔐 Setup Proposal Info</div>
+    <div class="info-header">
+      Fill in your details below. Once generated, send the clean link to your special person! 💖
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Your Name</label>
+      <input type="text" id="adminName" class="input-field" placeholder="Enter your full name" autocomplete="off" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">bKash Number</label>
+      <input type="text" id="adminBkash" class="input-field" placeholder="017xxxxxxxx" autocomplete="off" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Phone Number</label>
+      <input type="text" id="adminPhone" class="input-field" placeholder="017xxxxxxxx" autocomplete="off" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Notification Email</label>
+      <input type="email" id="adminEmail" class="input-field" placeholder="you@domain.com" autocomplete="off" />
+    </div>
+
+    <button class="btn btn-yes" onclick="generateDirectLink()" style="margin-top: 8px; width: 100%;">
+      Generate Date Link 🔗
+    </button>
+  </div>
+
+  <!-- Screen 2: Link Generated Card -->
+  <div class="card" id="linkResultCard">
+    <div class="title">🎉 Link Generated!</div>
+    <div class="info-header" style="color: #ad1457; font-weight: bold;">
+      📢 Send this clean link to her! Details will be emailed to you when accepted.
+    </div>
+    <div class="link-box" id="generatedLinkText"></div>
+    <button class="btn btn-yes" onclick="copyLink()" style="margin-top: 12px; width: 100%;">
+      Copy Link 📋
+    </button>
+  </div>
+
+  <!-- Screen 3: Partner's Name Screen -->
+  <div class="card" id="nameCard">
+    <div class="title">✨ Welcome! What's your name? ✨</div>
+    <div class="form-group" style="margin: 15px 0 20px 0;">
+      <input type="text" id="targetUserName" class="input-field" style="text-align: center;" placeholder="Enter your name..." autocomplete="off" />
+    </div>
+    <button class="btn btn-yes" style="width: 100%;" onclick="submitTargetName()">Submit 💖</button>
+  </div>
+
+  <!-- Screen 4: Date Proposal Card -->
+  <div class="card" id="mainCard">
+    <div class="image-container">
+      <img src="image_folder/img1.jpg" alt="Proposal Image" onerror="this.src='image_folder/img1.jpeg'" />
+    </div>
+    <div class="title" id="proposalTitle">🌸 Will you go on a date with me? 🌸</div>
+    <div class="btn-group" id="btnGroupArea">
+      <button class="btn btn-yes" id="yesBtn" onclick="nextPage()">YES 💖</button>
+      <button class="btn btn-no" id="noBtn">NO ✨</button>
+    </div>
+  </div>
+
+  <div class="footer">Designed & Developed by PRANTO</div>
+
+  <script>
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxTQVnvgS8JO8nN3fj1ikKJb3m8LNx37V1vncWda694cq7fibyO8g5iMsH2hNrhpRHm/exec';
+    localStorage.setItem('googleScriptUrl', GOOGLE_SCRIPT_URL);
+
+    // Read Base64 Hash Token from URL
+    const hash = window.location.hash.substring(1);
+    let inviteData = null;
+
+    if (hash) {
+      try {
+        const decodedString = decodeURIComponent(escape(atob(hash)));
+        inviteData = JSON.parse(decodedString);
+      } catch (e) {
+        console.error("Invalid token", e);
+      }
+    }
+
+    if (inviteData && inviteData.email) {
+      localStorage.setItem('receiverEmail', inviteData.email);
+      localStorage.setItem('inviterName', inviteData.by || 'Someone Special');
+      document.getElementById('nameCard').style.display = 'flex';
+    } else {
+      document.getElementById('setupCard').style.display = 'flex';
+    }
+
+    function showAlert(msg) {
+      const alertBox = document.getElementById('topAlert');
+      alertBox.innerText = msg;
+      alertBox.classList.add('show');
+      setTimeout(() => alertBox.classList.remove('show'), 3500);
+    }
+
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      return emailRegex.test(email);
+    }
+
+    function generateDirectLink() {
+      const name = document.getElementById('adminName').value.trim();
+      const bkash = document.getElementById('adminBkash').value.trim();
+      const phone = document.getElementById('adminPhone').value.trim();
+      const email = document.getElementById('adminEmail').value.trim();
+
+      if (!name || !bkash || !phone || !email) {
+        showAlert('⚠️ Please fill in all fields!');
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        showAlert('⚠️ Please enter a valid email address!');
+        return;
+      }
+
+      const payload = { by: name, bkash: bkash, phone: phone, email: email };
+      const hashToken = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+
+      const baseUrl = window.location.origin + window.location.pathname;
+      const cleanShareLink = `${baseUrl}#${hashToken}`;
+
+      document.getElementById('setupCard').style.display = 'none';
+      document.getElementById('linkResultCard').style.display = 'flex';
+      document.getElementById('generatedLinkText').innerText = cleanShareLink;
+    }
+
+    function copyLink() {
+      const text = document.getElementById('generatedLinkText').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        showAlert('📋 Clean link copied! Send it to her 💕');
+      });
+    }
+
+    function submitTargetName() {
+      const name = document.getElementById('targetUserName').value.trim();
+      if (!name) {
+        showAlert('⚠️ Please enter your name!');
+        return;
+      }
+
+      localStorage.setItem('partnerName', name);
+      confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+      document.getElementById('proposalTitle').innerHTML = `🌸 Will you go on a date with me, ${name}? 🌸`;
+
+      setTimeout(() => {
+        document.getElementById('nameCard').style.display = 'none';
+        document.getElementById('mainCard').style.display = 'flex';
+      }, 350);
+    }
+
+    // Card-Bounded Evasive NO Button Logic
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const mainCard = document.getElementById('mainCard');
+    let isFloating = false;
+    let noAttempts = 0;
+
+    const funnyPhrases = [
+      "NO ✨",
+      "Really? 🥺",
+      "Think again! 💔",
+      "Sure? 😭",
+      "Catch me! 🏃💨",
+      "Nope! 😜",
+      "Try again! 😂",
+      "Say YES! 💖"
+    ];
+
+    function moveNoButton(e) {
+      if (e) e.preventDefault();
+
+      const cardRect = mainCard.getBoundingClientRect();
+      const yesRect = yesBtn.getBoundingClientRect();
+      const btnW = noBtn.offsetWidth || 85;
+      const btnH = noBtn.offsetHeight || 38;
+
+      if (!isFloating) {
+        noBtn.style.position = 'fixed';
+        isFloating = true;
+      }
+
+      // Keep button strictly around the middle card zone
+      const minX = cardRect.left + 15;
+      const maxX = cardRect.right - btnW - 15;
+      const minY = cardRect.top + 140;
+      const maxY = cardRect.bottom - btnH - 15;
+
+      let newX, newY;
+      let overlaps = true;
+      let safetyCounter = 0;
+
+      while (overlaps && safetyCounter < 20) {
+        newX = minX + Math.random() * (maxX - minX);
+        newY = minY + Math.random() * (maxY - minY);
+
+        const buffer = 25;
+        const inYesX = newX + btnW > (yesRect.left - buffer) && newX < (yesRect.right + buffer);
+        const inYesY = newY + btnH > (yesRect.top - buffer) && newY < (yesRect.bottom + buffer);
+
+        if (!inYesX || !inYesY) overlaps = false;
+        safetyCounter++;
+      }
+
+      noBtn.style.left = `${newX}px`;
+      noBtn.style.top = `${newY}px`;
+
+      noAttempts++;
+      noBtn.innerText = funnyPhrases[noAttempts % funnyPhrases.length];
+
+      const yesScale = Math.min(1.25, 1 + (noAttempts * 0.04));
+      yesBtn.style.transform = `scale(${yesScale})`;
+    }
+
+    noBtn.addEventListener('mouseenter', moveNoButton);
+    noBtn.addEventListener('touchstart', moveNoButton, { passive: false });
+    noBtn.addEventListener('click', moveNoButton);
+
+    function nextPage() {
+      window.location.href = 'page2.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>One Small Fee 💳</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
+    }
+
+    body {
+      background-color: #fce4ec;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      padding: 14px 10px 30px 10px;
+      position: relative;
+    }
+
+    .card {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 380px;
+      padding: 24px 18px;
+      border-radius: 24px;
+      box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      animation: popIn 0.35s ease-out forwards;
+      margin: auto;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .image-container {
+      width: 100px;
+      height: 100px;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      border: 3px solid #f8bbd0;
+      flex-shrink: 0;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .title {
+      font-size: 1.3rem;
+      color: #ad1457;
+      font-weight: 800;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .description {
+      font-size: 0.8rem;
+      color: #747d8c;
+      line-height: 1.4;
+      margin-bottom: 16px;
+      padding: 0 4px;
+    }
+
+    .fee-box {
+      width: 100%;
+      background-color: #fffafc;
+      border: 1.5px solid #f8bbd0;
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .fee-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .fee-name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #2f3542;
+    }
+
+    .fee-amount {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #e91e63;
+    }
+
+    .fee-details {
+      font-size: 0.7rem;
+      color: #a4b0be;
+      font-weight: 600;
+    }
+
+    .btn-pay {
+      width: 100%;
+      background-color: #ec407a;
+      color: white;
+      padding: 12px 20px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(236, 64, 122, 0.35);
+      transition: all 0.2s ease;
+      margin-bottom: 10px;
+    }
+
+    .btn-pay:hover {
+      background-color: #d81b60;
+      transform: translateY(-2px);
+    }
+
+    .btn-zero {
+      width: 100%;
+      background-color: #fffafc;
+      color: #ad1457;
+      border: 1.5px solid #f48fb1;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(244, 143, 177, 0.2);
+      transition: all 0.2s ease;
+      line-height: 1.2;
+    }
+
+    .btn-zero:hover {
+      background-color: #fce4ec;
+      border-color: #ec407a;
+      transform: translateY(-2px);
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 8px;
+      font-size: 0.72rem;
+      color: #c2185b;
+      opacity: 0.75;
+      user-select: none;
+      text-align: center;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="image-container">
+      <img src="image_folder/img6.jpg" alt="Fee Icon" onerror="this.src='image_folder/img6.jpeg'" />
+    </div>
+
+    <div class="title">one small fee</div>
+
+    <div class="description">
+      to confirm your acceptance of this date, please complete the following transaction. totally normal. everyone does this.
+    </div>
+
+    <div class="fee-box">
+      <div class="fee-header">
+        <span class="fee-name">Date Agreement™</span>
+        <span class="fee-amount">৳1000</span>
+      </div>
+      <div class="fee-details">
+        one-time fee • non-refundable • absolutely worth it
+      </div>
+    </div>
+
+    <button class="btn-pay" onclick="handlePay()">pay ৳1000 & confirm 💖</button>
+
+    <button class="btn-zero" onclick="handleZeroBalance()">
+      Treat yourself, I'm coming with zero balance 💸😂
+    </button>
+  </div>
+
+  <div class="footer">Designed & Developed by PRANTO</div>
+
+  <script>
+    function triggerHugeConfetti() {
+      // Massive Confetti Explosion
+      confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+      setTimeout(() => {
+        confetti({ particleCount: 120, angle: 60, spread: 80, origin: { x: 0 } });
+        confetti({ particleCount: 120, angle: 120, spread: 80, origin: { x: 1 } });
+      }, 200);
+    }
+
+    function handlePay() {
+      localStorage.setItem('paymentStatus', 'paid');
+      triggerHugeConfetti();
+      setTimeout(() => {
+        window.location.href = 'page7.html';
+      }, 700);
+    }
+
+    function handleZeroBalance() {
+      localStorage.setItem('paymentStatus', 'zero_balance');
+      triggerHugeConfetti();
+      setTimeout(() => {
+        window.location.href = 'page7.html';
+      }, 700);
+    }
+  </script>
+</body>
+</html>

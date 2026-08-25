@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Glad You Said Yes! 🚗💖</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
+    }
+
+    body {
+      background-color: #fce4ec;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      padding: 14px 10px 30px 10px;
+      position: relative;
+    }
+
+    .card {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 380px;
+      padding: 26px 20px;
+      border-radius: 24px;
+      box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      animation: popIn 0.35s ease-out forwards;
+      margin: auto;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .image-container {
+      width: 110px;
+      height: 110px;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      border: 3px solid #f8bbd0;
+      flex-shrink: 0;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .title {
+      font-size: 1.25rem;
+      color: #ad1457;
+      font-weight: 800;
+      margin-bottom: 10px;
+      line-height: 1.35;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .sub-note {
+      font-size: 0.8rem;
+      color: #747d8c;
+      font-style: italic;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      padding: 0 6px;
+    }
+
+    .hearts-row {
+      color: #f48fb1;
+      font-size: 0.95rem;
+      margin-bottom: 18px;
+      letter-spacing: 4px;
+    }
+
+    .btn-accept {
+      width: 100%;
+      background-color: #ec407a;
+      color: white;
+      padding: 12px 20px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(236, 64, 122, 0.4);
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-accept:hover {
+      background-color: #d81b60;
+      transform: translateY(-2px);
+    }
+
+    .btn-accept:active {
+      transform: scale(0.97);
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 8px;
+      font-size: 0.72rem;
+      color: #c2185b;
+      opacity: 0.75;
+      user-select: none;
+      text-align: center;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="image-container">
+      <img src="image_folder/img5.jpg" alt="Proposal Image" onerror="this.src='image_folder/img5.jpeg'" />
+    </div>
+
+    <div class="title" id="displayMessage">
+      Glad you didn't say no! Can't wait to see you 💖
+    </div>
+
+    <div class="sub-note">
+      P.S. If you're late, you're buying dessert. Just saying! 😂💖
+    </div>
+
+    <div class="hearts-row">
+      ♥ ♥ ♥ ♥ ♥
+    </div>
+
+    <button class="btn-accept" id="acceptBtn" onclick="goToNextPage()">
+      Ok, I accept! 👩‍❤️‍💋‍👨
+    </button>
+  </div>
+
+  <div class="footer">Designed & Developed by PRANTO</div>
+
+  <script>
+    function goToNextPage() {
+      const btn = document.getElementById('acceptBtn');
+      btn.disabled = true;
+
+      confetti({
+        particleCount: 110,
+        spread: 75,
+        origin: { y: 0.6 }
+      });
+
+      setTimeout(() => {
+        window.location.href = 'page6.html';
+      }, 450);
+    }
+  </script>
+</body>
+</html>
