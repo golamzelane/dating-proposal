@@ -246,7 +246,7 @@
   <div class="card" id="linkResultCard">
     <div class="title">🎉 Link Generated!</div>
     <div class="info-header" style="color: #ad1457; font-weight: bold;">
-      📢 Send this clean link to her! Details will be emailed to you when accepted.
+      📢 Send this clean link to your special person! Details will be emailed to you when accepted.
     </div>
     <div class="link-box" id="generatedLinkText"></div>
     <button class="btn btn-yes" onclick="copyLink()" style="margin-top: 12px; width: 100%;">
@@ -339,12 +339,12 @@
       document.getElementById('generatedLinkText').innerText = cleanShareLink;
     }
 
-    function copyLink() {
-      const text = document.getElementById('generatedLinkText').innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        showAlert('📋 Clean link copied! Send it to her 💕');
-      });
-    }
+   function copyLink() {
+  const text = document.getElementById('generatedLinkText').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    showAlert('📋 Clean link copied! Send it to your special person 💕');
+  });
+}
 
     function submitTargetName() {
       const name = document.getElementById('targetUserName').value.trim();
