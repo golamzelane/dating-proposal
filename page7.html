@@ -11,6 +11,8 @@
       padding: 0;
       box-sizing: border-box;
       font-family: 'Segoe UI', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     body {
@@ -29,8 +31,8 @@
     .card {
       background-color: #ffffff;
       width: 100%;
-      max-width: 390px;
-      padding: 26px 20px;
+      max-width: 400px;
+      padding: 24px 18px;
       border-radius: 28px;
       box-shadow: 0 12px 35px rgba(233, 30, 99, 0.2);
       text-align: center;
@@ -49,11 +51,11 @@
     }
 
     .image-container {
-      width: 115px;
-      height: 115px;
+      width: 110px;
+      height: 110px;
       border-radius: 22px;
       overflow: hidden;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       border: 3.5px solid #f48fb1;
       box-shadow: 0 6px 18px rgba(244, 143, 177, 0.4);
       flex-shrink: 0;
@@ -88,51 +90,100 @@
     }
 
     .status-msg {
-      font-size: 0.85rem;
-      color: #57606f;
-      margin-bottom: 16px;
-      line-height: 1.45;
+      font-size: 0.88rem;
+      color: #4b5563;
+      margin-bottom: 14px;
+      line-height: 1.5;
       padding: 0 4px;
+      font-weight: 600;
+    }
+
+    .status-msg strong {
+      color: #ad1457;
+      font-weight: 800;
     }
 
     .summary-box {
       width: 100%;
       background: #fffafc;
       border: 2px dashed #f48fb1;
-      border-radius: 20px;
-      padding: 16px 16px;
+      border-radius: 18px;
+      padding: 14px 14px;
       text-align: left;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       color: #2f3542;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
     }
 
     .summary-item {
-      margin: 8px 0;
+      margin: 7px 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
     }
 
     .summary-item strong {
       color: #747d8c;
       font-size: 0.82rem;
+      white-space: nowrap;
     }
 
     .summary-val {
       font-weight: 800;
       color: #e91e63;
       text-align: right;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
+      word-break: break-word;
+    }
+
+    .weather-summary-box {
+      width: 100%;
+      background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+      border: 1.8px solid #7dd3fc;
+      border-radius: 16px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      text-align: left;
+    }
+
+    .weather-summary-title {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #0369a1;
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .weather-summary-details {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #0c4a6e;
+      line-height: 1.4;
+    }
+
+    .travel-note-box {
+      width: 100%;
+      background: #fff5f5;
+      border: 1.5px dashed #feb2b2;
+      border-radius: 14px;
+      padding: 9px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #c53030;
+      margin-bottom: 12px;
+      line-height: 1.4;
+      text-align: center;
     }
 
     .end-note {
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 800;
       color: #ad1457;
       margin-top: 2px;
-      line-height: 1.3;
+      line-height: 1.35;
     }
 
     .footer {
@@ -144,6 +195,7 @@
       user-select: none;
       text-align: center;
       width: 100%;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -161,7 +213,7 @@
       Getting everything ready for you!
     </div>
 
-    <!-- Final Summary Details -->
+    <!-- Summary Details -->
     <div class="summary-box">
       <div class="summary-item">
         <strong>📅 Date:</strong>
@@ -179,9 +231,25 @@
         <strong>🍔 Vibes:</strong>
         <span class="summary-val" id="sumFood">TBD</span>
       </div>
+
+      <!-- Weather Details -->
+      <div class="weather-summary-box" id="weatherBox">
+        <div class="weather-summary-title">
+          <span id="weatherForecastHeader">🌦️ Weather Forecast</span>
+          <span id="weatherHolidayBadge">✨ Good Day</span>
+        </div>
+        <div class="weather-summary-details" id="weatherForecastBody">
+          🌡️ Temperature & rain details loading...
+        </div>
+      </div>
     </div>
 
-    <div class="end-note">Can't wait to see your prettiest smile! 🌹✨</div>
+    <!-- 20 Neutral Caring & Cute Tips (No gender / No transport specific) -->
+    <div class="travel-note-box" id="travelAdviceBox">
+      💡 Caring Advice Loading...
+    </div>
+
+    <div class="end-note" id="finalEndNote">Can't wait to see your prettiest smile! 🌹✨</div>
   </div>
 
   <div class="footer">Designed & Developed by PRANTO</div>
@@ -222,17 +290,265 @@
     const food = localStorage.getItem('datingFood') || 'Yummy Treats';
     const status = localStorage.getItem('paymentStatus');
 
+    const savedDayStatus = localStorage.getItem('datingDayStatus') || 'Normal Day';
+    const savedWeatherSummary = localStorage.getItem('datingWeatherSummary') || 'Pleasant & Mild Weather Predicted';
+
     document.getElementById('sumDate').innerText = date;
     document.getElementById('sumTime').innerText = time;
     document.getElementById('sumPlace').innerText = place;
     document.getElementById('sumFood').innerText = food;
 
+    document.getElementById('weatherHolidayBadge').innerText = savedDayStatus;
+    document.getElementById('weatherForecastBody').innerText = savedWeatherSummary;
+
+    // 20 Universal Caring, Cute & Safe Advice (No vehicles, no boys/girls bias)
+    const neutralTips = [
+      "🚶‍♂️ Take your time on the way, no need to rush at all! 💖",
+      "📱 Make sure your phone has enough charge before heading out! ⚡",
+      "☔ Keep an eye on the sky and grab an umbrella if needed! 🌧️✨",
+      "👟 Wear whatever makes you feel the most comfortable and happy! 🌸",
+      "💧 Stay hydrated and fresh before leaving home! 🥤✨",
+      "🕰️ Even if you're a few minutes late, travel safely and peacefully! 💕",
+      "🎒 Double-check that you have all your keys and essentials! 🔑✨",
+      "🧣 Put on something cozy if the weather feels breezy! ❄️💫",
+      "🥰 Just come with a relaxed mind and ready for lots of smiles! ✨",
+      "🍔 Save plenty of space in your tummy for all the yummy food! 😋🍕",
+      "🎧 Listen to your favorite song on the way to set the vibe! 🎵💖",
+      "🚪 I'll be waiting right by the entrance for you! 🌟",
+      "✨ Leave all your daily stress behind, today is just for relaxing! 💆‍♀️💕",
+      "📸 Make sure you're ready to take some cute memories together! 📷✨",
+      "🌸 Take deep breaths and have a smooth, safe journey! 💫",
+      "🍨 We're definitely grabbing extra dessert, so get excited! 🍰💖",
+      "💌 Text me whenever you start your journey! 📲✨",
+      "🌟 Your presence is going to make this day truly special! 💖",
+      "🌈 Wishing you the safest and happiest trip over! 🌹",
+      "💫 Just bring yourself and your beautiful energy! 💕"
+    ];
+
+    document.getElementById('travelAdviceBox').innerText = neutralTips[Math.floor(Math.random() * neutralTips.length)];
+
+    // 20 Random Messages for "Pay" Click
+    const paidMessages = [
+      {
+        title: "VIP Date Confirmed! 👑💖",
+        msg: `Told ya it's 100% on me, <strong>${partner}</strong>! 💖 The bill is covered, but keep a tiny backup just in case we order the entire menu! 😉🍕`,
+        end: "Get ready for the best date ever! 🌹✨"
+      },
+      {
+        title: "Bill's on Me, You're the VIP! 🥂✨",
+        msg: `Aww <strong>${partner}</strong>, you actually tried to pay! 🥹 Don't worry, your smile is the only currency accepted here. ✨`,
+        end: "Can't wait to see your prettiest smile! 💕"
+      },
+      {
+        title: "Free Treats Unlocked! 🍰💖",
+        msg: `Mission Successful, <strong>${partner}</strong>! 💌 Everything is booked on my tab. Just bring your appetite and good vibes! 😂✨`,
+        end: "Counting down the hours! ⏳💫"
+      },
+      {
+        title: "Official Golden Date! 🌟💍",
+        msg: `No wallet needed, <strong>${partner}</strong>! 🥰 Tonight everything is on me. But if we end up ordering extra dessert, you're helping me finish it! 🍨💖`,
+        end: "It's gonna be truly magical! 🌸✨"
+      },
+      {
+        title: "Table Reserved with Love! 🍽️✨",
+        msg: `Payment waived for our VIP guest, <strong>${partner}</strong>! 💖 All expenses are taken care of. Just bring your awesome energy! 🍕`,
+        end: "Looking forward to making great memories! 💫🌹"
+      },
+      {
+        title: "You're My Favorite Guest! 🎁💕",
+        msg: `You didn't really think I'd take your money, right <strong>${partner}</strong>? 😆 Everything is on my account! Just bring your best stories. ✨`,
+        end: "Can't wait to see you soon! 💌✨"
+      },
+      {
+        title: "Royalty Treatment Active! 👑✨",
+        msg: `Your payment was rejected because you're way too special, <strong>${partner}</strong>! 🥰 My treat all the way!`,
+        end: "Prepare for a wonderful time! 🌹💫"
+      },
+      {
+        title: "The Golden Pass! 🎫💖",
+        msg: `You just unlocked unlimited free snacks and drinks, <strong>${partner}</strong>! 🥤 All covered by me. Just bring your great mood! ✨`,
+        end: "See you looking amazing as always! 🌸💕"
+      },
+      {
+        title: "Special Guest Confirmed! 🌟💖",
+        msg: `Aww <strong>${partner}</strong>, put your cash away! 👛 Today you get the best treatment without spending a dime! 🥰`,
+        end: "Can't wait for our lovely hangout! 🥂✨"
+      },
+      {
+        title: "Unlimited Treats Tonight! 🥞💖",
+        msg: `The entire menu is on my tab, <strong>${partner}</strong>! 🍽️ Just bring a big appetite and ready for fun! 😉`,
+        end: "Counting down every second! ⏳💕"
+      },
+      {
+        title: "Sweetest Date Locked In! 🍯✨",
+        msg: `You tried to pay? That's adorable, <strong>${partner}</strong>! 🥹 Save your cash, because this entire day is my treat to you! 🎁💖`,
+        end: "Arrive on time and enjoy! 🌹✨"
+      },
+      {
+        title: "Premium Date Experience! 💎💖",
+        msg: `Transaction approved as 100% FREE for <strong>${partner}</strong>! 🥳 Today is all about having a blast! 🌸`,
+        end: "Get ready for tons of laughs! 😂✨"
+      },
+      {
+        title: "All Expenses Sponsored! 🎀🥂",
+        msg: `Everything from food to vibes is sponsored for you, <strong>${partner}</strong>! 💖 Just bring your bubbly energy! ✨`,
+        end: "Looking forward to seeing you! 🌟🌹"
+      },
+      {
+        title: "VIP Foodie Confirmed! 🍔👑",
+        msg: `Free food and full comfort for <strong>${partner}</strong>! 🎉 Don't even think about touching the bill today! 😉`,
+        end: "Let's eat yummy food together! 🍰💖"
+      },
+      {
+        title: "Heart Approved! 💓✨",
+        msg: `Payment status: Paid in smiles, <strong>${partner}</strong>! 🥰 The real bill is on me. Just show up happy! 💫`,
+        end: "Sending you lots of warm vibes! 💌🌹"
+      },
+      {
+        title: "Special Treat Protocol! 🎊💖",
+        msg: `Zero charges applied for <strong>${partner}</strong>! 💖 All items on the table will be handled by me. You just enjoy! ✨`,
+        end: "Can't wait to hang out with you! 🥂💕"
+      },
+      {
+        title: "The Ultimate VIP Pass! 🎟️✨",
+        msg: `Your attempt to pay was super sweet, <strong>${partner}</strong>! 😂 But everything is booked on my tab. Just bring your wonderful company! 🌹`,
+        end: "Ready to make it unforgettable! 💫💖"
+      },
+      {
+        title: "Sweet Date Awaits! 🍧💖",
+        msg: `No payments needed from you, <strong>${partner}</strong>! 👑 You're the guest of honor, and everything is on me! ✨`,
+        end: "Can't wait to see you! 🌸💕"
+      },
+      {
+        title: "Exclusive Date Access! 🚪💖",
+        msg: `Access granted for <strong>${partner}</strong> with zero bill pressure! 💖 I've got everything covered, just bring that bright smile! 😊✨`,
+        end: "See you very soon! 🌹💫"
+      },
+      {
+        title: "Certified VIP Date! 💍✨",
+        msg: `You're officially covered for the entire date, <strong>${partner}</strong>! 💖 Save your money, today's bill is mine! 😉`,
+        end: "Get ready for an awesome time! 🌸✨"
+      }
+    ];
+
+    // 20 Random Messages for "Zero Balance" Click
+    const zeroBalanceMessages = [
+      {
+        title: "Zero Balance Royalty! 💸👑",
+        msg: `Coming with zero balance, huh <strong>${partner}</strong>? 😂 Don't worry at all, my treat! Just bring yourself, your funny jokes, and your lovely smile! ✨`,
+        end: "Zero balance, 100% good vibes! 💖"
+      },
+      {
+        title: "Broke but Gorgeous! 💅💸",
+        msg: `Zero balance detected for <strong>${partner}</strong>! 😆 That's totally fine, I’ve got full sponsorship covered for you today. Just get ready to eat! 🍔✨`,
+        end: "Ready to treat you properly! 🌹✨"
+      },
+      {
+        title: "VIP Guest of Honor! 🥳👑",
+        msg: `Zero wallet pressure, <strong>${partner}</strong>! 💖 You just sit back and relax, I'll handle the feast. Your presence is all that matters! 🥰`,
+        end: "See you super soon! 💕"
+      },
+      {
+        title: "Certified Free Loader! 😂🎉",
+        msg: `Coming with exactly ৳0, <strong>${partner}</strong>? Legend behavior! 😂 Don't stress, I'm ready to treat you. Just bring all your cute energy! 💫`,
+        end: "Get your appetite ready! 🍕✨"
+      },
+      {
+        title: "100% Sponsored Date! 🎟️💸",
+        msg: `No wallet today, <strong>${partner}</strong>? Perfect! 😂 That means more food for you and more bills for me. Can't wait! 🥂💖`,
+        end: "Get ready to eat lots of delicious treats! 🍰✨"
+      },
+      {
+        title: "Royal Treatment Active! 👑🌸",
+        msg: `Zero balance is the standard package for someone special like you, <strong>${partner}</strong>! 💅 I'll take care of every single bill. 🌹💫`,
+        end: "Counting every second until our date! ⏳💖"
+      },
+      {
+        title: "Empty Wallet, Full Heart! 💖😂",
+        msg: `Empty pockets? No problem at all, <strong>${partner}</strong>! 😆 I'm happily taking full financial responsibility for all your food cravings today! 🍟🍕`,
+        end: "Bring your biggest appetite! 🤤✨"
+      },
+      {
+        title: "The Professional Freebie! 🕶️💸",
+        msg: `Zero balance selected with pure confidence, <strong>${partner}</strong>! 😂 Respect the honesty! Everything is on me! 🍽️✨`,
+        end: "Let the feast begin! 🍕💖"
+      },
+      {
+        title: "Master of Free Treats! 👑🍔",
+        msg: `Coming with ৳0? That's an absolute boss move, <strong>${partner}</strong>! 😎 Sit tight and let me treat you with all the snacks! 🍧💕`,
+        end: "Get ready for lots of giggles! 😂🌸"
+      },
+      {
+        title: "Full Sponsorship Unlocked! 📜💖",
+        msg: `Today's date is proudly brought to you by my account, <strong>${partner}</strong>! 😂 Just bring your charming self and have fun! 🥂💫`,
+        end: "See you super soon! ☀️🌹"
+      },
+      {
+        title: "No Money, No Problem! 👸💸",
+        msg: `No money needed when you're this fun, <strong>${partner}</strong>! 🥰 Relax, eat whatever you want, and let me handle everything! 😉🍕`,
+        end: "Counting the minutes! ⏳✨"
+      },
+      {
+        title: "Free Dining Membership! 💳✨",
+        msg: `Your ৳0 balance has been matched with my 100% treat guarantee, <strong>${partner}</strong>! 😂 Enjoy every single bite! 🥞💖`,
+        end: "Ready to make you smile! 🌸💕"
+      },
+      {
+        title: "The Legend of Free Dates! 😂🏆",
+        msg: `Zero balance? That's totally fine, <strong>${partner}</strong>! Just come with your brightest smile! 🍽️✨`,
+        end: "Can't wait to see you laughing! 🌹✨"
+      },
+      {
+        title: "Sponsored with Love! 💌💸",
+        msg: `Who needs money when you have someone ready to treat you, <strong>${partner}</strong>? 🥰 Today is all about good vibes and delicious food! 🍔💖`,
+        end: "Dress comfortable and cute! ✨🌸"
+      },
+      {
+        title: "Zero Budget, Maximum Fun! 🎢💖",
+        msg: `Zero balance detected, but 100% sweetness guaranteed, <strong>${partner}</strong>! 💖 I’ll cover everything! 🎡✨`,
+        end: "Looking forward to our awesome date! 🌹💫"
+      },
+      {
+        title: "Free Food Explorer! 🍕😂",
+        msg: `৳0 in hand and ready to eat, <strong>${partner}</strong>? 😂 Let's order everything delicious and have a blast! 🍰💖`,
+        end: "See you very soon! 🌸✨"
+      },
+      {
+        title: "VIP Free Entry! 🚀👑",
+        msg: `Zero wallet stress for <strong>${partner}</strong> today! 💫 Just bring your stories, everything else is covered! 🥰`,
+        end: "Can't wait to catch up! 💌🌹"
+      },
+      {
+        title: "Best Deal in Town! 🏷️💖",
+        msg: `You bring the charm, I bring the treat, <strong>${partner}</strong>! 😆 A fair trade for the coolest person! 🌹✨`,
+        end: "Counting down to our special time! ⏳💕"
+      },
+      {
+        title: "Zero Taka, Infinite Fun! 💸💓",
+        msg: `Zero balance confirmed for <strong>${partner}</strong>! 😂 You don't need a single coin, your presence is worth everything! 💎💖`,
+        end: "See you very soon! 🌸✨"
+      },
+      {
+        title: "Ultimate Date Champion! 🥇💖",
+        msg: `Coming with zero cash like a true champion, <strong>${partner}</strong>! 😂 Just show up and let me spoil you properly! 🎁💫`,
+        end: "Get ready for a wonderful day! 🌹✨"
+      }
+    ];
+
+    function getRandomItem(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
     if (status === 'paid') {
-      document.getElementById('finalTitle').innerText = "VIP Date Confirmed! 💖✨";
-      document.getElementById('finalStatusMsg').innerHTML = `Aww, thank you for the sweet fee, <strong>${partner}</strong>! You just unlocked the most unforgettable VIP date! 🥂🌸`;
+      const chosen = getRandomItem(paidMessages);
+      document.getElementById('finalTitle').innerText = chosen.title;
+      document.getElementById('finalStatusMsg').innerHTML = chosen.msg;
+      document.getElementById('finalEndNote').innerText = chosen.end;
     } else {
-      document.getElementById('finalTitle').innerText = "You're My Guest! 🍰💖";
-      document.getElementById('finalStatusMsg').innerHTML = `Don't worry at all, <strong>${partner}</strong>! The entire treat is on me. Just bring yourself and that lovely smile! 🥰✨`;
+      const chosen = getRandomItem(zeroBalanceMessages);
+      document.getElementById('finalTitle').innerText = chosen.title;
+      document.getElementById('finalStatusMsg').innerHTML = chosen.msg;
+      document.getElementById('finalEndNote').innerText = chosen.end;
     }
   </script>
 </body>
