@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Glad You Said Yes! 🚗💖</title>
+  <title>Glad You Picked! 💖✨</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     * {
@@ -11,6 +11,8 @@
       padding: 0;
       box-sizing: border-box;
       font-family: 'Segoe UI', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     body {
@@ -29,31 +31,32 @@
     .card {
       background-color: #ffffff;
       width: 100%;
-      max-width: 380px;
+      max-width: 390px;
       padding: 26px 20px;
-      border-radius: 24px;
-      box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
+      border-radius: 26px;
+      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.18);
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
-      animation: popIn 0.35s ease-out forwards;
+      animation: popIn 0.4s ease-out forwards;
       margin: auto;
     }
 
     @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.92); }
+      0% { opacity: 0; transform: scale(0.9); }
       100% { opacity: 1; transform: scale(1); }
     }
 
     .image-container {
-      width: 110px;
-      height: 110px;
-      border-radius: 18px;
+      width: 120px;
+      height: 120px;
+      border-radius: 20px;
       overflow: hidden;
-      margin-bottom: 16px;
-      border: 3px solid #f8bbd0;
+      margin-bottom: 14px;
+      border: 3.5px solid #f8bbd0;
+      box-shadow: 0 4px 14px rgba(248, 187, 208, 0.4);
       flex-shrink: 0;
     }
 
@@ -64,43 +67,54 @@
       display: block;
     }
 
+    .badge {
+      background: #fce4ec;
+      color: #ad1457;
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border: 1px solid #f8bbd0;
+    }
+
     .title {
       font-size: 1.25rem;
       color: #ad1457;
-      font-weight: 800;
-      margin-bottom: 10px;
+      font-weight: 900;
+      margin-bottom: 8px;
       line-height: 1.35;
-      overflow-wrap: break-word;
-      word-break: break-word;
     }
 
     .sub-note {
-      font-size: 0.8rem;
-      color: #747d8c;
-      font-style: italic;
-      line-height: 1.4;
+      font-size: 0.84rem;
+      color: #57606f;
+      line-height: 1.45;
       margin-bottom: 12px;
       padding: 0 6px;
+      font-weight: 600;
     }
 
     .hearts-row {
       color: #f48fb1;
-      font-size: 0.95rem;
-      margin-bottom: 18px;
+      font-size: 1rem;
+      margin-bottom: 14px;
       letter-spacing: 4px;
     }
 
     .btn-accept {
       width: 100%;
-      background-color: #ec407a;
+      background: linear-gradient(135deg, #ff4b72, #e81b54);
       color: white;
-      padding: 12px 20px;
-      font-size: 0.95rem;
-      font-weight: bold;
+      padding: 12px 18px;
+      font-size: 0.94rem;
+      font-weight: 800;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(236, 64, 122, 0.4);
+      box-shadow: 0 4px 14px rgba(232, 27, 84, 0.35);
       transition: all 0.2s ease;
       display: flex;
       justify-content: center;
@@ -109,7 +123,7 @@
     }
 
     .btn-accept:hover {
-      background-color: #d81b60;
+      background: linear-gradient(135deg, #e81b54, #c2185b);
       transform: translateY(-2px);
     }
 
@@ -126,6 +140,7 @@
       user-select: none;
       text-align: center;
       width: 100%;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -136,11 +151,13 @@
       <img src="image_folder/img5.jpg" alt="Proposal Image" onerror="this.src='image_folder/img5.jpeg'" />
     </div>
 
+    <div class="badge" id="vibeBadge">Menu Locked 🔒</div>
+
     <div class="title" id="displayMessage">
       Glad you didn't say no! Can't wait to see you 💖
     </div>
 
-    <div class="sub-note">
+    <div class="sub-note" id="displaySub">
       P.S. If you're late, you're buying dessert. Just saying! 😂💖
     </div>
 
@@ -149,13 +166,204 @@
     </div>
 
     <button class="btn-accept" id="acceptBtn" onclick="goToNextPage()">
-      Ok, I accept! 👩‍❤️‍💋‍👨
+      <span id="btnText">Click for a quick surprise! 👀✨</span>
     </button>
   </div>
 
   <div class="footer">Designed & Developed by PRANTO</div>
 
   <script>
+    // 30 Gender-Neutral, Respectful, Sweet & Fun Messages
+    const genderNeutralReactions = [
+      {
+        badge: "Special Guest 🌟",
+        title: "So Glad You're Coming! 💖",
+        sub: "Having you there will make this day truly complete and memorable! ✨",
+        btn: "One small funny rule! 👀➔"
+      },
+      {
+        badge: "Pure Excitement 🎉",
+        title: "Can't Wait to See You! 🥰",
+        sub: "Just bring your genuine self and bright energy, that's all that matters! 🌸",
+        btn: "Check this out real quick! 🙈➔"
+      },
+      {
+        badge: "Vibes Aligned 🎯",
+        title: "The Best Company Ever! 🥂",
+        sub: "Getting to spend quality time with an amazing person like you is a blessing! 💫",
+        btn: "See what's next! 🪄➔"
+      },
+      {
+        badge: "Warm Welcome ☕",
+        title: "Counting Down the Moments! ⏳",
+        sub: "Can't wait to sit together, share stories, and laugh our hearts out! 🍕",
+        btn: "Tap for a tiny surprise! 😜➔"
+      },
+      {
+        badge: "Smiles Ahead 😊",
+        title: "You're Going to Love This! 🌈",
+        sub: "Everything is set up to make you feel comfortable, relaxed, and happy! 🌹",
+        btn: "Click for a quick giggle! 🤭➔"
+      },
+      {
+        badge: "Sweet Company 🍯",
+        title: "Honored to Have You! 💖",
+        sub: "Your presence is the most valuable part of this entire plan! ✨",
+        btn: "Wait, see the funny twist! 😂➔"
+      },
+      {
+        badge: "Happy Energy ⚡",
+        title: "A Truly Special Day Awaits! 🎈",
+        sub: "Looking forward to wonderful conversations and great treats together! 🍰",
+        btn: "One last cute step! 💌➔"
+      },
+      {
+        badge: "Top Tier Human 🥇",
+        title: "You're an Absolute Gem! 💎",
+        sub: "Thank you for saying yes! Get ready for warm vibes and lots of joy! 🌟",
+        btn: "Tap to move forward! 🚀➔"
+      },
+      {
+        badge: "All Smiles ✨",
+        title: "Excited Beyond Words! 🥳",
+        sub: "The atmosphere will be 100% fun, relaxed, and welcoming for you! 🌷",
+        btn: "Check out the next page! 👀➔"
+      },
+      {
+        badge: "Heartfelt Joy 💓",
+        title: "So Happy You'll Be There! 💌",
+        sub: "Just show up with a peaceful mind and leave all the arrangements to me! 💫",
+        btn: "See the tiny condition! 😜➔"
+      },
+      {
+        badge: "Great Company 🛋️",
+        title: "Comfort & Laughter Guaranteed! 😄",
+        sub: "No formalities needed! Just be 100% comfortable and enjoy your time. 🍕",
+        btn: "Click for a mini surprise! 🪄➔"
+      },
+      {
+        badge: "Golden Moments 🌅",
+        title: "Making Good Memories! 📸",
+        sub: "Looking forward to sharing delicious food and genuine smiles with you! 🍧",
+        btn: "Hold on, check this! 🙈➔"
+      },
+      {
+        badge: "A Wonderful Soul 🌸",
+        title: "You Bring Good Vibes Everywhere! ✨",
+        sub: "I'm genuinely looking forward to spending this lovely time together! 💖",
+        btn: "Click to see what's next! 🐾➔"
+      },
+      {
+        badge: "Treat Season 🎁",
+        title: "A Treat Deserved! 🥞",
+        sub: "You deserve all the treats and relaxation today! Let's make it awesome! 🌹",
+        btn: "Next funny screen! 💃➔"
+      },
+      {
+        badge: "Good Times Ahead ⏳",
+        title: "The Stage is Set! 🎊",
+        sub: "Good food, nice music, and your wonderful company—what more could I ask for? 🎶",
+        btn: "Quick, click here! 🏃‍♂️➔"
+      },
+      {
+        badge: "True Friend & Companion 🤝",
+        title: "So Thrilled to Meet Up! 💖",
+        sub: "Can't wait to catch up on everything and make your day brighter! 🌻",
+        btn: "Proceed to the fun part! 🥳➔"
+      },
+      {
+        badge: "Cozy Vibe 🫖",
+        title: "Warmth & Good Vibes! 🌸",
+        sub: "A relaxing time with great conversations is waiting just for you! 🍰",
+        btn: "One tiny step left! 🐾➔"
+      },
+      {
+        badge: "Awesome Human 🌟",
+        title: "You Make Everything Better! 💫",
+        sub: "Your presence alone makes this plan a huge success! See you soon! 💕",
+        btn: "See what awaits next! 🪄➔"
+      },
+      {
+        badge: "Feast & Fun 🍽️",
+        title: "Ready for Great Treats! 😋",
+        sub: "Bring your best appetite and get ready to enjoy some fantastic food! 🍔",
+        btn: "Click for a laugh! 🤭➔"
+      },
+      {
+        badge: "Peace & Joy 🕊️",
+        title: "Just Relax & Enjoy! 🌿",
+        sub: "Leave every worry behind—today is all about good times and smiles! ✨",
+        btn: "Check one small detail! 👀➔"
+      },
+      {
+        badge: "Pure Magic 🪄",
+        title: "Looking Forward to Seeing You! 💖",
+        sub: "Every minute spent in your company is guaranteed to be joyful! 🌹",
+        btn: "Tap to see the twist! 😂➔"
+      },
+      {
+        badge: "Big Smile Mode 😁",
+        title: "A Truly Special Hangout! 🎉",
+        sub: "Can't wait to see your happy face when we finally sit down together! 🍧",
+        btn: "Next step awaits! 🚀➔"
+      },
+      {
+        badge: "Genuine Connection 💫",
+        title: "You're Incredibly Valued! 🌷",
+        sub: "Thank you for making time! I promise to make it completely worth it! 💖",
+        btn: "Look at this real quick! 👀➔"
+      },
+      {
+        badge: "Laughter Therapy 😂",
+        title: "Get Ready to Laugh! 🍕",
+        sub: "I hope you're ready for non-stop funny stories and great vibes! 🥳",
+        btn: "Click for a mini surprise! 🎁➔"
+      },
+      {
+        badge: "Relaxing Hour ☕",
+        title: "The Perfect Break! 🍰",
+        sub: "A cozy table, delicious bites, and your wonderful company—perfection! ✨",
+        btn: "One last cute step! 🎀➔"
+      },
+      {
+        badge: "Joyful Day 🎈",
+        title: "Counting Every Second! ⏳",
+        sub: "So excited to hang out and make this day one to remember! 💖",
+        btn: "See what's next! 💫➔"
+      },
+      {
+        badge: "Bright Light ☀️",
+        title: "Your Presence is a Gift! 🎁",
+        sub: "Having someone as wonderful as you around is always a pleasure! 🌸",
+        btn: "Tap for the final twist! 😜➔"
+      },
+      {
+        badge: "Super Excited 🚀",
+        title: "Everything is Locked & Ready! 🔒",
+        sub: "All preparations are done, just waiting for your lovely arrival! 🌹",
+        btn: "Click to see the funny part! 😆➔"
+      },
+      {
+        badge: "Kind Heart 💓",
+        title: "Can't Wait to Welcome You! 🚪",
+        sub: "Just bring your authentic self and let's have a fabulous time! 🥂",
+        btn: "Check the last detail! 💌➔"
+      },
+      {
+        badge: "100% Happiness 🌈",
+        title: "The Best Time Awaits! ✨",
+        sub: "Looking forward to sharing great food, big smiles, and unforgettable vibes! 💖",
+        btn: "Click to see what's next! 💖➔"
+      }
+    ];
+
+    // Pick 1 of 30 neutral reactions randomly
+    const randomChoice = genderNeutralReactions[Math.floor(Math.random() * genderNeutralReactions.length)];
+    document.getElementById('vibeBadge').innerText = randomChoice.badge;
+    document.getElementById('displayMessage').innerText = randomChoice.title;
+    document.getElementById('displaySub').innerText = randomChoice.sub;
+    document.getElementById('btnText').innerText = randomChoice.btn;
+
     function goToNextPage() {
       const btn = document.getElementById('acceptBtn');
       btn.disabled = true;
