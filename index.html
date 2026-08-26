@@ -21,7 +21,6 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
       padding: 12px;
       position: relative;
     }
@@ -63,6 +62,7 @@
       position: relative;
       animation: popIn 0.35s ease-out forwards;
       margin: auto;
+      z-index: 10;
     }
 
     @keyframes popIn {
@@ -115,7 +115,7 @@
     }
 
     .btn {
-      padding: 10px 20px;
+      padding: 10px 22px;
       font-size: 0.92rem;
       font-weight: bold;
       border: none;
@@ -123,40 +123,50 @@
       cursor: pointer;
       user-select: none;
       white-space: nowrap;
-      transition: background-color 0.2s;
     }
 
     .btn-yes {
-      background-color: #f48fb1;
+      background: linear-gradient(135deg, #ff4b72, #e81b54);
       color: white;
-      box-shadow: 0 4px 10px rgba(244, 143, 177, 0.4);
-      min-width: 100px;
-      transition: transform 0.2s ease, background-color 0.2s;
+      box-shadow: 0 4px 14px rgba(232, 27, 84, 0.4);
+      min-width: 105px;
+      height: 40px;
+      z-index: 20;
     }
 
     .btn-yes:hover {
-      background-color: #ec407a;
+      background: linear-gradient(135deg, #e81b54, #c2185b);
+    }
+
+    .no-btn-slot {
+      width: 90px;
+      height: 40px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .btn-no {
       background-color: #ce93d8;
       color: white;
       box-shadow: 0 4px 10px rgba(206, 147, 216, 0.4);
-      min-width: 80px;
-      max-width: 130px;
-      z-index: 99;
-      transition: transform 0.2s ease;
+      min-width: 85px;
+      height: 40px;
+      z-index: 9999;
+      position: fixed;
+      transition: left 0.4s cubic-bezier(0.25, 1, 0.5, 1), top 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .btn-group {
-      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
       width: 100%;
-      height: 70px;
-      margin-top: 6px;
+      height: 50px;
+      margin-top: 10px;
+      position: relative;
     }
 
     .image-container {
@@ -271,17 +281,19 @@
     <div class="title" id="proposalTitle">🌸 Will you go on a date with me? 🌸</div>
     <div class="btn-group" id="btnGroupArea">
       <button class="btn btn-yes" id="yesBtn" onclick="nextPage()">YES 💖</button>
-      <button class="btn btn-no" id="noBtn">NO ✨</button>
+      <div class="no-btn-slot" id="noSlot"></div>
     </div>
   </div>
+
+  <!-- Global NO Button -->
+  <button class="btn btn-no" id="noBtn" style="display: none;">NO ✨</button>
 
   <div class="footer">Designed & Developed by PRANTO</div>
 
   <script>
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxTQVnvgS8JO8nN3fj1ikKJb3m8LNx37V1vncWda694cq7fibyO8g5iMsH2hNrhpRHm/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4QaGGinbuO6FSTD54Kd_HsYq65mFYgsKU-zMqzrDYcWfQuIun8f3UU0nxvZNfCO6G/exec';
     localStorage.setItem('googleScriptUrl', GOOGLE_SCRIPT_URL);
 
-    // Read Base64 Hash Token from URL
     const hash = window.location.hash.substring(1);
     let inviteData = null;
 
@@ -339,12 +351,12 @@
       document.getElementById('generatedLinkText').innerText = cleanShareLink;
     }
 
-   function copyLink() {
-  const text = document.getElementById('generatedLinkText').innerText;
-  navigator.clipboard.writeText(text).then(() => {
-    showAlert('📋 Clean link copied! Send it to your special person 💕');
-  });
-}
+    function copyLink() {
+      const text = document.getElementById('generatedLinkText').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        showAlert('📋 Clean link copied! Send it to your special person 💕');
+      });
+    }
 
     function submitTargetName() {
       const name = document.getElementById('targetUserName').value.trim();
@@ -360,75 +372,102 @@
       setTimeout(() => {
         document.getElementById('nameCard').style.display = 'none';
         document.getElementById('mainCard').style.display = 'flex';
+        initNoButtonPosition();
       }, 350);
     }
 
-    // Card-Bounded Evasive NO Button Logic
     const noBtn = document.getElementById('noBtn');
+    const noSlot = document.getElementById('noSlot');
     const yesBtn = document.getElementById('yesBtn');
     const mainCard = document.getElementById('mainCard');
-    let isFloating = false;
-    let noAttempts = 0;
+    let lastDotIndex = -1;
 
-    const funnyPhrases = [
-      "NO ✨",
-      "Really? 🥺",
-      "Think again! 💔",
-      "Sure? 😭",
-      "Catch me! 🏃💨",
-      "Nope! 😜",
-      "Try again! 😂",
-      "Say YES! 💖"
-    ];
-
-    function moveNoButton(e) {
-      if (e) e.preventDefault();
-
-      const cardRect = mainCard.getBoundingClientRect();
-      const yesRect = yesBtn.getBoundingClientRect();
-      const btnW = noBtn.offsetWidth || 85;
-      const btnH = noBtn.offsetHeight || 38;
-
-      if (!isFloating) {
-        noBtn.style.position = 'fixed';
-        isFloating = true;
-      }
-
-      // Keep button strictly around the middle card zone
-      const minX = cardRect.left + 15;
-      const maxX = cardRect.right - btnW - 15;
-      const minY = cardRect.top + 140;
-      const maxY = cardRect.bottom - btnH - 15;
-
-      let newX, newY;
-      let overlaps = true;
-      let safetyCounter = 0;
-
-      while (overlaps && safetyCounter < 20) {
-        newX = minX + Math.random() * (maxX - minX);
-        newY = minY + Math.random() * (maxY - minY);
-
-        const buffer = 25;
-        const inYesX = newX + btnW > (yesRect.left - buffer) && newX < (yesRect.right + buffer);
-        const inYesY = newY + btnH > (yesRect.top - buffer) && newY < (yesRect.bottom + buffer);
-
-        if (!inYesX || !inYesY) overlaps = false;
-        safetyCounter++;
-      }
-
-      noBtn.style.left = `${newX}px`;
-      noBtn.style.top = `${newY}px`;
-
-      noAttempts++;
-      noBtn.innerText = funnyPhrases[noAttempts % funnyPhrases.length];
-
-      const yesScale = Math.min(1.25, 1 + (noAttempts * 0.04));
-      yesBtn.style.transform = `scale(${yesScale})`;
+    function initNoButtonPosition() {
+      const slotRect = noSlot.getBoundingClientRect();
+      noBtn.style.left = `${slotRect.left}px`;
+      noBtn.style.top = `${slotRect.top}px`;
+      noBtn.style.display = 'block';
     }
 
-    noBtn.addEventListener('mouseenter', moveNoButton);
-    noBtn.addEventListener('touchstart', moveNoButton, { passive: false });
-    noBtn.addEventListener('click', moveNoButton);
+    window.addEventListener('resize', () => {
+      if (mainCard.style.display === 'flex' && lastDotIndex === -1) {
+        initNoButtonPosition();
+      }
+    });
+
+    function moveNoBtn() {
+      const cardRect = mainCard.getBoundingClientRect();
+      const btnW = noBtn.offsetWidth || 85;
+      const btnH = noBtn.offsetHeight || 40;
+
+      // Close-range visible points around the card
+      const dots = [
+        { x: cardRect.left + 15, y: cardRect.top - btnH - 10 },
+        { x: cardRect.left + (cardRect.width / 2) - (btnW / 2), y: cardRect.top - btnH - 12 },
+        { x: cardRect.right - btnW - 15, y: cardRect.top - btnH - 10 },
+        { x: cardRect.left - btnW - 10, y: cardRect.top + 30 },
+        { x: cardRect.left - btnW - 12, y: cardRect.top + (cardRect.height / 2) - (btnH / 2) },
+        { x: cardRect.left - btnW - 10, y: cardRect.bottom - btnH - 30 },
+        { x: cardRect.right + 10, y: cardRect.top + 30 },
+        { x: cardRect.right + 12, y: cardRect.top + (cardRect.height / 2) - (btnH / 2) },
+        { x: cardRect.right + 10, y: cardRect.bottom - btnH - 30 },
+        { x: cardRect.left + 15, y: cardRect.bottom + 10 },
+        { x: cardRect.left + (cardRect.width / 2) - (btnW / 2), y: cardRect.bottom + 12 },
+        { x: cardRect.right - btnW - 15, y: cardRect.bottom + 10 }
+      ];
+
+      let nextIndex;
+      do {
+        nextIndex = Math.floor(Math.random() * dots.length);
+      } while (nextIndex === lastDotIndex);
+      lastDotIndex = nextIndex;
+
+      const target = dots[nextIndex];
+      const safeX = Math.max(10, Math.min(window.innerWidth - btnW - 10, target.x));
+      const safeY = Math.max(10, Math.min(window.innerHeight - btnH - 10, target.y));
+
+      noBtn.style.left = `${safeX}px`;
+      noBtn.style.top = `${safeY}px`;
+    }
+
+    function returnNoToHome() {
+      const slotRect = noSlot.getBoundingClientRect();
+      noBtn.style.left = `${slotRect.left}px`;
+      noBtn.style.top = `${slotRect.top}px`;
+      lastDotIndex = -1;
+    }
+
+    // Proximity triggers on Mouse Move (PC)
+    document.addEventListener('mousemove', (e) => {
+      if (mainCard.style.display !== 'flex') return;
+
+      const noRect = noBtn.getBoundingClientRect();
+      const noCenterX = noRect.left + noRect.width / 2;
+      const noCenterY = noRect.top + noRect.height / 2;
+      const distToNo = Math.hypot(e.clientX - noCenterX, e.clientY - noCenterY);
+
+      if (distToNo < 50) {
+        moveNoBtn();
+      }
+
+      const yesRect = yesBtn.getBoundingClientRect();
+      const yesCenterX = yesRect.left + yesRect.width / 2;
+      const yesCenterY = yesRect.top + yesRect.height / 2;
+      const distToYes = Math.hypot(e.clientX - yesCenterX, e.clientY - yesCenterY);
+
+      if (distToYes < 65) {
+        returnNoToHome();
+      }
+    });
+
+    // Touch Support for Mobile
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      moveNoBtn();
+    }, { passive: false });
+
+    yesBtn.addEventListener('mouseenter', returnNoToHome);
+    yesBtn.addEventListener('touchstart', returnNoToHome, { passive: true });
 
     function nextPage() {
       window.location.href = 'page2.html';
