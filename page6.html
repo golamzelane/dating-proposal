@@ -11,6 +11,8 @@
       padding: 0;
       box-sizing: border-box;
       font-family: 'Segoe UI', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     body {
@@ -65,7 +67,7 @@
     }
 
     .title {
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       color: #ad1457;
       font-weight: 800;
       margin-bottom: 8px;
@@ -73,11 +75,12 @@
     }
 
     .description {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: #747d8c;
-      line-height: 1.4;
+      line-height: 1.45;
       margin-bottom: 16px;
       padding: 0 4px;
+      font-weight: 600;
     }
 
     .fee-box {
@@ -99,60 +102,105 @@
 
     .fee-name {
       font-size: 0.95rem;
-      font-weight: 800;
+      font-weight: 700;
       color: #2f3542;
     }
 
     .fee-amount {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: #e91e63;
     }
 
     .fee-details {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       color: #a4b0be;
       font-weight: 600;
     }
 
-    .btn-pay {
+    .btn-action {
       width: 100%;
-      background-color: #ec407a;
+      background: linear-gradient(135deg, #ff4b72, #e81b54);
       color: white;
-      padding: 12px 20px;
-      font-size: 0.95rem;
-      font-weight: bold;
+      padding: 12px 18px;
+      font-size: 0.92rem;
+      font-weight: 700;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(236, 64, 122, 0.35);
+      box-shadow: 0 4px 14px rgba(232, 27, 84, 0.35);
       transition: all 0.2s ease;
       margin-bottom: 10px;
+      line-height: 1.3;
     }
 
-    .btn-pay:hover {
-      background-color: #d81b60;
+    .btn-action:hover {
+      background: linear-gradient(135deg, #e81b54, #c2185b);
       transform: translateY(-2px);
     }
 
-    .btn-zero {
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      background-color: #fffafc;
-      color: #ad1457;
-      border: 1.5px solid #f48fb1;
-      padding: 10px 16px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(244, 143, 177, 0.2);
-      transition: all 0.2s ease;
-      line-height: 1.2;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 15px;
     }
 
-    .btn-zero:hover {
-      background-color: #fce4ec;
-      border-color: #ec407a;
+    .modal-box {
+      background: #ffffff;
+      width: 100%;
+      max-width: 340px;
+      padding: 24px 20px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+      animation: popIn 0.25s ease-out;
+    }
+
+    .modal-emoji {
+      font-size: 2.6rem;
+      margin-bottom: 8px;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ad1457;
+      margin-bottom: 8px;
+    }
+
+    .modal-text {
+      font-size: 0.88rem;
+      color: #57606f;
+      line-height: 1.5;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .btn-modal {
+      width: 100%;
+      background: linear-gradient(135deg, #ff4b72, #e81b54);
+      color: white;
+      padding: 11px 20px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(232, 27, 84, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-modal:hover {
+      background: linear-gradient(135deg, #e81b54, #c2185b);
       transform: translateY(-2px);
     }
 
@@ -165,6 +213,7 @@
       user-select: none;
       text-align: center;
       width: 100%;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -191,18 +240,155 @@
       </div>
     </div>
 
-    <button class="btn-pay" onclick="handlePay()">pay ৳1000 & confirm 💖</button>
+    <!-- 1st Action Button: Triggers Random Popup -->
+    <button class="btn-action" onclick="showPayPopup()">pay ৳1000 & confirm 💖</button>
 
-    <button class="btn-zero" onclick="handleZeroBalance()">
+    <!-- 2nd Action Button -->
+    <button class="btn-action" onclick="handleZeroBalance()">
       Treat yourself, I'm coming with zero balance 💸😂
     </button>
+  </div>
+
+  <!-- Dynamic Random Popup Modal -->
+  <div class="modal-overlay" id="payModal">
+    <div class="modal-box">
+      <div class="modal-emoji" id="popEmoji">🥹✨</div>
+      <div class="modal-title" id="popTitle">Silly! It's on me 💖</div>
+      <div class="modal-text" id="popText">
+        You don’t have to pay a single penny, I’ve got it all covered! Just show up on time with your pretty smile. 💫
+      </div>
+      <button class="btn-modal" id="popBtn" onclick="proceedToPage7()">Aww, thank you! 💕</button>
+    </div>
   </div>
 
   <div class="footer">Designed & Developed by PRANTO</div>
 
   <script>
+    // 20 Random Popup Messages for Pay Button Click
+    const popupPool = [
+      {
+        emoji: "🥹✨",
+        title: "Silly! It's on me 💖",
+        text: "You don't have to pay a single penny, I've got it all covered! Just show up on time with your pretty smile. 💫",
+        btn: "Aww, thank you! 💕"
+      },
+      {
+        emoji: "👑💸",
+        title: "Royalty Pays Nothing! 💅",
+        text: "Payment declined because VIP queens don't pay on dates! Keep your money and let me spoil you properly! 🌸",
+        btn: "Okay, deal! 🥰"
+      },
+      {
+        emoji: "💳🙅‍♂️",
+        title: "Put Your Wallet Away! 🚫",
+        text: "Did you really think I'd let you pay? Not a chance! Everything is sponsored by my heart. 💖",
+        btn: "Hehe, thanks! 🙈"
+      },
+      {
+        emoji: "🥰✨",
+        title: "Aww, How Cute! 💕",
+        text: "Save those ৳1000 for your shopping later! Today's entire bill is 100% on my tab. ✨",
+        btn: "You're the best! 💖"
+      },
+      {
+        emoji: "🍕🎁",
+        title: "Treat Protocol Active! 🍽️",
+        text: "Your only job is to look gorgeous and eat all the food you want. I'll handle the waiter! 😉",
+        btn: "Can't wait! 😋"
+      },
+      {
+        emoji: "💫🎀",
+        title: "Zero Taka Required! 🌸",
+        text: "Your lovely presence and laughter are worth way more than ৳1000. No cash needed today! 💌",
+        btn: "So sweet! 💕"
+      },
+      {
+        emoji: "🦖💖",
+        title: "Food Monster Warning! 🍔",
+        text: "I'm paying for everything today, just promise you won't judge how much food I order! 😂🍕",
+        btn: "Deal accepted! 🤣"
+      },
+      {
+        emoji: "🥂👑",
+        title: "Exclusive VIP Guest! 🌟",
+        text: "Transaction canceled! The universe sent a special code: 'Date is 100% Free for Cuties'. 💫",
+        btn: "I love this code! 💃"
+      },
+      {
+        emoji: "🛍️💅",
+        title: "Save It For Shopping! 🎀",
+        text: "Keep that cash safe in your purse! Tonight I am your full-time food and happiness sponsor. 🍰✨",
+        btn: "Thank you so much! 💖"
+      },
+      {
+        emoji: "👼💕",
+        title: "Sweetest Attempt Ever! 🥺",
+        text: "Nice try trying to pay, but chivalry isn't dead! You just sit back and enjoy the best date! 🌹",
+        btn: "Ready to be pampered! ✨"
+      },
+      {
+        emoji: "🧁💖",
+        title: "Dessert is on Me Too! 🍨",
+        text: "Not only is the date free for you, but I'm also adding extra ice cream to the menu! 😋✨",
+        btn: "Yayy, extra treats! 🎉"
+      },
+      {
+        emoji: "💸😂",
+        title: "Payment Blocked! 🛑",
+        text: "Error 404: Can't accept money from someone this charming. Everything is on me! 💌",
+        btn: "You're hilarious! 😂💕"
+      },
+      {
+        emoji: "🌹💫",
+        title: "Date Agreement Waived! 📜",
+        text: "The fee has been officially cleared by management. Just bring yourself and your cute jokes! ✨",
+        btn: "See you soon! 💖"
+      },
+      {
+        emoji: "💍🌸",
+        title: "Golden Pass Granted! 🎟️",
+        text: "You unlocked unlimited free treats and great conversation. Zero payment accepted today! 🥰",
+        btn: "Awesome! 🥳"
+      },
+      {
+        emoji: "🛺💨",
+        title: "Save Your Rickshaw Fare! 👛",
+        text: "Keep your money for the ride over! Everything else from snacks to fun is on me! 🍟💖",
+        btn: "Got it! 🛺💕"
+      },
+      {
+        emoji: "🎩✨",
+        title: "Gentleman's Rule! 🌹",
+        text: "Rule #1 of dating me: You never open your wallet. Just show up and smile! 💫",
+        btn: "Loving this rule! 🙈"
+      },
+      {
+        emoji: "🍟🍔",
+        title: "100% Free Feast! 🤤",
+        text: "Put your credit card away! We are going on a feast and my card is doing all the work! 💳✨",
+        btn: "Let's eat! 🍕"
+      },
+      {
+        emoji: "🎊💖",
+        title: "Complimentary VIP Pass! 👑",
+        text: "Your bill was automatically paid with infinite hugs and smiles. No cash allowed! 🥰",
+        btn: "Aww, so cute! 💖"
+      },
+      {
+        emoji: "☀️🌻",
+        title: "Sunshine Treatment! ✨",
+        text: "You don't pay for anything today! Just bring your bright energy and let me treat you! 💖",
+        btn: "Count me in! 💫"
+      },
+      {
+        emoji: "💖💌",
+        title: "Card Denied: Too Precious! 💎",
+        text: "Your money is no good here, cutie! Everything is covered by me, from start to finish. 🌹✨",
+        btn: "Thank you! 💕"
+      }
+    ];
+
     function triggerHugeConfetti() {
-      // Massive Confetti Explosion
       confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
       setTimeout(() => {
         confetti({ particleCount: 120, angle: 60, spread: 80, origin: { x: 0 } });
@@ -210,12 +396,25 @@
       }, 200);
     }
 
-    function handlePay() {
+    function showPayPopup() {
+      // Pick 1 of 20 random sweet messages
+      const randomMsg = popupPool[Math.floor(Math.random() * popupPool.length)];
+      
+      document.getElementById('popEmoji').innerText = randomMsg.emoji;
+      document.getElementById('popTitle').innerText = randomMsg.title;
+      document.getElementById('popText').innerText = randomMsg.text;
+      document.getElementById('popBtn').innerText = randomMsg.btn;
+
+      document.getElementById('payModal').style.display = 'flex';
+      confetti({ particleCount: 80, spread: 60, origin: { y: 0.5 } });
+    }
+
+    function proceedToPage7() {
       localStorage.setItem('paymentStatus', 'paid');
       triggerHugeConfetti();
       setTimeout(() => {
         window.location.href = 'page7.html';
-      }, 700);
+      }, 500);
     }
 
     function handleZeroBalance() {
