@@ -139,6 +139,13 @@
       transform: translateY(-2px);
     }
 
+    .btn-action:disabled {
+      background: #b2bec3;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -241,10 +248,10 @@
     </div>
 
     <!-- 1st Action Button: Triggers Random Popup -->
-    <button class="btn-action" onclick="showPayPopup()">pay ৳1000 & confirm 💖</button>
+    <button class="btn-action" id="payBtn" onclick="showPayPopup()">pay ৳1000 & confirm 💖</button>
 
-    <!-- 2nd Action Button -->
-    <button class="btn-action" onclick="handleZeroBalance()">
+    <!-- 2nd Action Button: Zero Balance -->
+    <button class="btn-action" id="zeroBtn" onclick="handleZeroBalance()">
       Treat yourself, I'm coming with zero balance 💸😂
     </button>
   </div>
@@ -264,6 +271,8 @@
   <div class="footer">Designed & Developed by PRANTO</div>
 
   <script>
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4QaGGinbuO6FSTD54Kd_HsYq65mFYgsKU-zMqzrDYcWfQuIun8f3UU0nxvZNfCO6G/exec';
+
     // 20 Random Popup Messages for Pay Button Click
     const popupPool = [
       {
@@ -275,7 +284,7 @@
       {
         emoji: "👑💸",
         title: "Royalty Pays Nothing! 💅",
-        text: "Payment declined because VIP queens don't pay on dates! Keep your money and let me spoil you properly! 🌸",
+        text: "Payment declined because VIP guests don't pay on dates! Keep your money and let me treat you properly! 🌸",
         btn: "Okay, deal! 🥰"
       },
       {
@@ -287,13 +296,13 @@
       {
         emoji: "🥰✨",
         title: "Aww, How Cute! 💕",
-        text: "Save those ৳1000 for your shopping later! Today's entire bill is 100% on my tab. ✨",
+        text: "Save those ৳1000 for shopping later! Today's entire bill is 100% on my tab. ✨",
         btn: "You're the best! 💖"
       },
       {
         emoji: "🍕🎁",
         title: "Treat Protocol Active! 🍽️",
-        text: "Your only job is to look gorgeous and eat all the food you want. I'll handle the waiter! 😉",
+        text: "Your only job is to arrive relaxed and enjoy all the treats you want. I'll handle the waiter! 😉",
         btn: "Can't wait! 😋"
       },
       {
@@ -311,37 +320,37 @@
       {
         emoji: "🥂👑",
         title: "Exclusive VIP Guest! 🌟",
-        text: "Transaction canceled! The universe sent a special code: 'Date is 100% Free for Cuties'. 💫",
+        text: "Transaction canceled! The universe sent a special code: 'Date is 100% Free for Special Guests'. 💫",
         btn: "I love this code! 💃"
       },
       {
         emoji: "🛍️💅",
         title: "Save It For Shopping! 🎀",
-        text: "Keep that cash safe in your purse! Tonight I am your full-time food and happiness sponsor. 🍰✨",
+        text: "Keep that cash safe! Tonight I am your full-time food and happiness sponsor. 🍰✨",
         btn: "Thank you so much! 💖"
       },
       {
         emoji: "👼💕",
         title: "Sweetest Attempt Ever! 🥺",
-        text: "Nice try trying to pay, but chivalry isn't dead! You just sit back and enjoy the best date! 🌹",
+        text: "Nice try trying to pay, but hospitality is priority! You just sit back and enjoy the best date! 🌹",
         btn: "Ready to be pampered! ✨"
       },
       {
         emoji: "🧁💖",
         title: "Dessert is on Me Too! 🍨",
-        text: "Not only is the date free for you, but I'm also adding extra ice cream to the menu! 😋✨",
+        text: "Not only is the date free for you, but I'm also adding extra dessert to the menu! 😋✨",
         btn: "Yayy, extra treats! 🎉"
       },
       {
         emoji: "💸😂",
         title: "Payment Blocked! 🛑",
-        text: "Error 404: Can't accept money from someone this charming. Everything is on me! 💌",
+        text: "Error 404: Can't accept money from someone this wonderful. Everything is on me! 💌",
         btn: "You're hilarious! 😂💕"
       },
       {
         emoji: "🌹💫",
         title: "Date Agreement Waived! 📜",
-        text: "The fee has been officially cleared by management. Just bring yourself and your cute jokes! ✨",
+        text: "The fee has been officially cleared by management. Just bring yourself and your best jokes! ✨",
         btn: "See you soon! 💖"
       },
       {
@@ -352,26 +361,26 @@
       },
       {
         emoji: "🛺💨",
-        title: "Save Your Rickshaw Fare! 👛",
-        text: "Keep your money for the ride over! Everything else from snacks to fun is on me! 🍟💖",
+        title: "Save Your Travel Fare! 👛",
+        text: "Keep your money safe for travel! Everything else from snacks to fun is on me! 🍟💖",
         btn: "Got it! 🛺💕"
       },
       {
         emoji: "🎩✨",
         title: "Gentleman's Rule! 🌹",
-        text: "Rule #1 of dating me: You never open your wallet. Just show up and smile! 💫",
+        text: "Rule #1 of this date: You never open your wallet. Just show up and smile! 💫",
         btn: "Loving this rule! 🙈"
       },
       {
         emoji: "🍟🍔",
         title: "100% Free Feast! 🤤",
-        text: "Put your credit card away! We are going on a feast and my card is doing all the work! 💳✨",
+        text: "Put your credit card away! We are going on a feast and my account is doing all the work! 💳✨",
         btn: "Let's eat! 🍕"
       },
       {
         emoji: "🎊💖",
         title: "Complimentary VIP Pass! 👑",
-        text: "Your bill was automatically paid with infinite hugs and smiles. No cash allowed! 🥰",
+        text: "Your bill was automatically paid with infinite smiles and good vibes. No cash allowed! 🥰",
         btn: "Aww, so cute! 💖"
       },
       {
@@ -383,7 +392,7 @@
       {
         emoji: "💖💌",
         title: "Card Denied: Too Precious! 💎",
-        text: "Your money is no good here, cutie! Everything is covered by me, from start to finish. 🌹✨",
+        text: "Your money is no good here! Everything is covered by me, from start to finish. 🌹✨",
         btn: "Thank you! 💕"
       }
     ];
@@ -396,8 +405,42 @@
       }, 200);
     }
 
+    // Function to trigger Google Apps Script Email
+    function sendMailToServer(paymentChoice) {
+      const partner = localStorage.getItem('partnerName') || 'Special Person';
+      const inviter = localStorage.getItem('inviterName') || 'Someone Special';
+      const date = localStorage.getItem('datingDate') || 'TBD';
+      const time = localStorage.getItem('datingTime') || 'TBD';
+      const place = localStorage.getItem('datingPlace') || 'TBD';
+      const food = localStorage.getItem('datingFood') || 'Delicious Treats';
+      const email = localStorage.getItem('receiverEmail') || '';
+      const dayStatus = localStorage.getItem('datingDayStatus') || 'Regular Day';
+      const weatherSummary = localStorage.getItem('datingWeatherSummary') || 'Pleasant weather predicted';
+
+      const formData = new URLSearchParams();
+      formData.append('partnerName', partner);
+      formData.append('inviterName', inviter);
+      formData.append('date', date);
+      formData.append('time', time);
+      formData.append('place', place);
+      formData.append('food', food);
+      formData.append('email', email);
+      formData.append('dayStatus', dayStatus);
+      formData.append('weatherSummary', weatherSummary);
+      formData.append('paymentStatus', paymentChoice);
+      formData.append('submittedAt', new Date().toLocaleString());
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData.toString()
+      }).catch(err => console.error("Mail send error:", err));
+    }
+
     function showPayPopup() {
-      // Pick 1 of 20 random sweet messages
       const randomMsg = popupPool[Math.floor(Math.random() * popupPool.length)];
       
       document.getElementById('popEmoji').innerText = randomMsg.emoji;
@@ -411,6 +454,7 @@
 
     function proceedToPage7() {
       localStorage.setItem('paymentStatus', 'paid');
+      sendMailToServer('paid');
       triggerHugeConfetti();
       setTimeout(() => {
         window.location.href = 'page7.html';
@@ -419,6 +463,7 @@
 
     function handleZeroBalance() {
       localStorage.setItem('paymentStatus', 'zero_balance');
+      sendMailToServer('zero_balance');
       triggerHugeConfetti();
       setTimeout(() => {
         window.location.href = 'page7.html';
