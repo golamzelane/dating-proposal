@@ -11,6 +11,8 @@
       padding: 0;
       box-sizing: border-box;
       font-family: 'Segoe UI', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     body {
@@ -98,6 +100,7 @@
       font-size: 0.82rem;
       color: #747d8c;
       margin-bottom: 12px;
+      font-weight: 600;
     }
 
     /* Scrollable Food Container */
@@ -210,6 +213,7 @@
       color: #c2185b;
       opacity: 0.75;
       user-select: none;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -413,7 +417,7 @@
           <span class="food-name">Falooda</span>
         </div>
 
-        <!-- Row 12, 13 & 14: Drinks & Beverages (45-56) - All Distinct Icons -->
+        <!-- Row 12, 13 & 14: Drinks & Beverages (45-56) -->
         <div class="food-card" onclick="toggleFood(this, 'Cold Coffee 🧋')">
           <span class="food-emoji">🧋</span>
           <span class="food-name">Cold Coffee</span>
@@ -471,7 +475,6 @@
   <div class="footer">Designed & Developed by PRANTO</div>
 
   <script>
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4QaGGinbuO6FSTD54Kd_HsYq65mFYgsKU-zMqzrDYcWfQuIun8f3UU0nxvZNfCO6G/exec';
     let selectedFoods = [];
 
     function showAlert(msg) {
@@ -499,41 +502,16 @@
 
       const doneBtn = document.getElementById('doneBtn');
       doneBtn.disabled = true;
-      doneBtn.innerText = 'Confirming... 💌';
+      doneBtn.innerText = 'Locking Vibes... 🍕💖';
 
-      const partner = localStorage.getItem('partnerName') || 'Partner';
-      const inviter = localStorage.getItem('inviterName') || 'Someone Special';
-      const date = localStorage.getItem('datingDate') || 'TBD';
-      const time = localStorage.getItem('datingTime') || 'TBD';
-      const place = localStorage.getItem('datingPlace') || 'TBD';
-      const email = localStorage.getItem('receiverEmail') || '';
       const foodText = selectedFoods.join(', ');
-
       localStorage.setItem('datingFood', foodText);
-
-      const formData = new URLSearchParams();
-      formData.append('partnerName', partner);
-      formData.append('inviterName', inviter);
-      formData.append('date', date);
-      formData.append('time', time);
-      formData.append('place', place);
-      formData.append('food', foodText);
-      formData.append('email', email);
 
       confetti({ particleCount: 110, spread: 75, origin: { y: 0.6 } });
 
-      fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: formData.toString()
-      });
-
       setTimeout(() => {
         window.location.href = 'page5.html';
-      }, 500);
+      }, 400);
     }
   </script>
 </body>
