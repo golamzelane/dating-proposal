@@ -52,8 +52,8 @@
     .card {
       background-color: #ffffff;
       width: 100%;
-      max-width: 380px;
-      padding: 24px 18px;
+      max-width: 400px;
+      padding: 20px 18px;
       border-radius: 24px;
       box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
       text-align: center;
@@ -70,12 +70,39 @@
       100% { opacity: 1; transform: scale(1); }
     }
 
+    .live-datetime-card {
+      background: #fffafc;
+      border: 2px dashed #f8bbd0;
+      border-radius: 16px;
+      padding: 8px 12px;
+      width: 100%;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .live-time-display {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #ad1457;
+      letter-spacing: 0.8px;
+    }
+
+    .live-date-display {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #747d8c;
+      margin-top: 2px;
+    }
+
     .image-container {
-      width: 110px;
-      height: 110px;
+      width: 100px;
+      height: 100px;
       border-radius: 18px;
       overflow: hidden;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       border: 3px solid #f8bbd0;
       flex-shrink: 0;
     }
@@ -88,17 +115,17 @@
     }
 
     .title {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       color: #ad1457;
       font-weight: 800;
-      margin-bottom: 15px;
-      line-height: 1.35;
+      margin-bottom: 12px;
+      line-height: 1.3;
     }
 
     .form-group {
       width: 100%;
       text-align: left;
-      margin-bottom: 12px;
+      margin-bottom: 11px;
     }
 
     .form-label {
@@ -110,27 +137,17 @@
       margin-left: 4px;
     }
 
-    .date-row {
-      display: flex;
-      gap: 6px;
-      width: 100%;
-    }
-
-    .custom-select-box {
-      position: relative;
-      flex: 1;
-    }
-
     .input-field {
       width: 100%;
-      padding: 10px 12px;
-      font-size: 0.9rem;
+      padding: 10px 14px;
+      font-size: 0.92rem;
       border: 2px solid #f8bbd0;
       border-radius: 14px;
       outline: none;
       color: #2f3542;
       background-color: #fffafc;
       font-weight: 600;
+      transition: all 0.25s ease;
     }
 
     .text-center {
@@ -141,39 +158,146 @@
       border-color: #ec407a;
     }
 
-    .dropdown-list {
+    /* Place Box Highlight Animation */
+    .highlight-place {
+      border-color: #ff4757 !important;
+      background-color: #fff0f3 !important;
+      box-shadow: 0 0 12px rgba(255, 71, 87, 0.45) !important;
+      animation: pulseGlow 1.2s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.02); }
+    }
+
+    .date-picker-wrapper {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .date-display-box {
+      width: 100%;
+      padding: 10px 115px 10px 14px;
+      font-size: 0.92rem;
+      border: 2px solid #f8bbd0;
+      border-radius: 14px;
+      color: #2f3542;
+      background-color: #fffafc;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .date-select-btn {
       position: absolute;
-      top: 105%;
+      right: 5px;
+      background: linear-gradient(135deg, #ff4b72, #e81b54);
+      color: white;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(232, 27, 84, 0.35);
+      pointer-events: none;
+      transition: transform 0.15s ease;
+    }
+
+    .date-picker-wrapper:hover .date-select-btn {
+      transform: scale(1.04);
+    }
+
+    .hidden-date-input {
+      position: absolute;
+      top: 0;
       left: 0;
       width: 100%;
-      max-height: 140px;
-      background: #ffffff;
-      border: 2px solid #f8bbd0;
-      border-radius: 12px;
-      overflow-y: auto;
-      display: none;
-      z-index: 500;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-      list-style: none;
-    }
-
-    .dropdown-list.open {
-      display: block;
-    }
-
-    .dropdown-list li {
-      padding: 7px;
-      font-size: 0.85rem;
-      color: #2f3542;
+      height: 100%;
+      opacity: 0;
       cursor: pointer;
-      text-align: center;
-      transition: background 0.2s;
+      z-index: 10;
     }
 
-    .dropdown-list li:hover {
-      background-color: #fce4ec;
-      color: #ad1457;
-      font-weight: bold;
+    .selected-status-badge {
+      display: none;
+      margin-top: 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 5px 10px;
+      border-radius: 12px;
+      text-align: center;
+      width: 100%;
+      animation: popIn 0.25s ease-out;
+    }
+
+    .status-holiday {
+      background-color: #ffeaa7;
+      color: #d63031;
+      border: 1.5px solid #ff7675;
+    }
+
+    .status-weekend {
+      background-color: #ff7675;
+      color: #ffffff;
+    }
+
+    .status-working {
+      background-color: #55efc4;
+      color: #00b894;
+      border: 1.5px solid #00b894;
+    }
+
+    .weather-detail-card {
+      display: none;
+      margin-top: 10px;
+      background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+      border: 2px solid #7dd3fc;
+      border-radius: 16px;
+      padding: 10px 12px;
+      text-align: left;
+      animation: popIn 0.25s ease-out;
+    }
+
+    .weather-header {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #0369a1;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .weather-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    .weather-item {
+      background: rgba(255, 255, 255, 0.75);
+      padding: 6px 8px;
+      border-radius: 10px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #0c4a6e;
+    }
+
+    .weather-tip {
+      margin-top: 6px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #b91c1c;
+      background: #fef2f2;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px dashed #fca5a5;
+      text-align: center;
+      line-height: 1.25;
     }
 
     select.input-field {
@@ -188,28 +312,28 @@
 
     .btn-set {
       width: 100%;
-      background-color: #f48fb1;
+      background: linear-gradient(135deg, #ff4b72, #e81b54);
       color: white;
-      padding: 12px 18px;
+      padding: 11px 18px;
       font-size: 0.95rem;
       font-weight: bold;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      margin-top: 6px;
-      box-shadow: 0 4px 12px rgba(244, 143, 177, 0.4);
+      margin-top: 5px;
+      box-shadow: 0 4px 14px rgba(232, 27, 84, 0.4);
       transition: all 0.2s ease;
     }
 
     .btn-set:hover {
-      background-color: #ec407a;
+      background: linear-gradient(135deg, #e81b54, #c2185b);
       transform: translateY(-2px);
     }
 
     .footer {
       position: fixed;
-      bottom: 8px;
-      font-size: 0.75rem;
+      bottom: 6px;
+      font-size: 0.72rem;
       color: #c2185b;
       opacity: 0.75;
       user-select: none;
@@ -221,53 +345,56 @@
   <div class="toast-alert" id="topAlert">⚠️ Error Message</div>
 
   <div class="card">
+    <div class="live-datetime-card">
+      <div class="live-time-display" id="liveClockDisplay">🕒 00:00:00 AM</div>
+      <div class="live-date-display" id="liveDateText">📅 Loading date...</div>
+    </div>
+
     <div class="image-container">
       <img src="image_folder/img3.jpg" alt="Date Picker" onerror="this.src='image_folder/img3.jpeg'" />
     </div>
 
     <div class="title">So... when are you free? 🗓️</div>
 
+    <!-- Date Picker Field -->
     <div class="form-group">
-      <label class="form-label">Pick / Type Date 📅</label>
-      <div class="date-row">
-        <div class="custom-select-box">
-          <input type="number" id="dayInput" class="input-field text-center" placeholder="DD" autocomplete="off" oninput="handleLimit(this, 2)" onclick="toggleList('dayList')" />
-          <ul class="dropdown-list" id="dayList"></ul>
-        </div>
-        <div class="custom-select-box">
-          <input type="number" id="monthInput" class="input-field text-center" placeholder="MM" autocomplete="off" oninput="handleLimit(this, 2)" onclick="toggleList('monthList')" />
-          <ul class="dropdown-list" id="monthList"></ul>
-        </div>
-        <div class="custom-select-box" style="flex: 1.2;">
-          <input type="number" id="yearInput" class="input-field text-center" placeholder="YYYY" autocomplete="off" oninput="handleLimit(this, 4)" onclick="toggleList('yearList')" />
-          <ul class="dropdown-list" id="yearList"></ul>
-        </div>
+      <label class="form-label">Pick Date 📅</label>
+      <div class="date-picker-wrapper" onclick="openCalendar()">
+        <div class="date-display-box" id="dateDisplayText">📅 Select Date...</div>
+        <div class="date-select-btn">📅 Choose Date</div>
+        <input type="date" id="singleDateInput" class="hidden-date-input" onchange="evaluateSelectedDate()" />
       </div>
+      
+      <div id="selectedStatusBadge" class="selected-status-badge"></div>
     </div>
 
+    <!-- Time Selector -->
     <div class="form-group">
       <label class="form-label" for="timeSelect">What Time? ⏰</label>
-      <select id="timeSelect" class="input-field text-center">
+      <select id="timeSelect" class="input-field text-center" onchange="handleTimeSelected()">
         <option value="" disabled selected>Select a time...</option>
-        <option value="10:00 AM">10:00 AM</option>
-        <option value="11:00 AM">11:00 AM</option>
-        <option value="12:00 PM">12:00 PM</option>
-        <option value="01:00 PM">01:00 PM</option>
-        <option value="02:00 PM">02:00 PM</option>
-        <option value="03:00 PM">03:00 PM</option>
-        <option value="04:00 PM">04:00 PM</option>
-        <option value="05:00 PM">05:00 PM</option>
-        <option value="06:00 PM">06:00 PM</option>
-        <option value="07:00 PM">07:00 PM</option>
-        <option value="08:00 PM">08:00 PM</option>
-        <option value="09:00 PM">09:00 PM</option>
-        <option value="10:00 PM">10:00 PM</option>
       </select>
     </div>
 
+    <!-- Location Field -->
     <div class="form-group">
       <label class="form-label" for="placeInput">Where are we going? 📍</label>
-      <input type="text" id="placeInput" class="input-field" placeholder="e.g. Interlaken, Switzerland" autocomplete="off" />
+      <input type="text" id="placeInput" class="input-field" placeholder="e.g. Interlaken, Switzerland" oninput="handlePlaceInput()" autocomplete="off" />
+    </div>
+
+    <!-- Weather Forecast Display in English -->
+    <div id="weatherDetailCard" class="weather-detail-card">
+      <div class="weather-header">
+        <span id="weatherMainStatus">🌦️ Weather Status</span>
+        <span id="weatherTempBadge">🌡️ 0°C</span>
+      </div>
+      <div class="weather-grid">
+        <div class="weather-item" id="rainStatus">🌧️ Rain: 0%</div>
+        <div class="weather-item" id="heatStatus">🔥 Vibe: Normal</div>
+        <div class="weather-item" id="windStatus">💨 Wind: Calm</div>
+        <div class="weather-item" id="cloudStatus">💧 Humidity: Normal</div>
+      </div>
+      <div class="weather-tip" id="datingWeatherTip">💡 Tip: Pleasant date weather predicted!</div>
     </div>
 
     <button class="btn-set" onclick="submitDate()">set the date! 💖</button>
@@ -276,56 +403,261 @@
   <div class="footer">Designed & Developed by PRANTO</div>
 
   <script>
-    const dayList = document.getElementById('dayList');
-    const monthList = document.getElementById('monthList');
-    const yearList = document.getElementById('yearList');
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    const dayInput = document.getElementById('dayInput');
-    const monthInput = document.getElementById('monthInput');
-    const yearInput = document.getElementById('yearInput');
-    const placeInput = document.getElementById('placeInput');
+    // Lock Date Selection to Today & Future Only
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = String(today.getMonth() + 1).padStart(2, '0');
+    const currentDay = String(today.getDate()).padStart(2, '0');
+    const todayStr = `${currentYear}-${currentMonth}-${currentDay}`;
 
-    for (let i = 1; i <= 31; i++) {
-      const val = i < 10 ? `0${i}` : `${i}`;
-      const li = document.createElement('li');
-      li.innerText = val;
-      li.onclick = () => { dayInput.value = val; closeAllLists(); };
-      dayList.appendChild(li);
+    const dateInput = document.getElementById('singleDateInput');
+    dateInput.min = todayStr;
+
+    function openCalendar() {
+      if (dateInput.showPicker) {
+        dateInput.showPicker();
+      } else {
+        dateInput.focus();
+      }
     }
 
-    for (let i = 1; i <= 12; i++) {
-      const val = i < 10 ? `0${i}` : `${i}`;
-      const li = document.createElement('li');
-      li.innerText = val;
-      li.onclick = () => { monthInput.value = val; closeAllLists(); };
-      monthList.appendChild(li);
+    function updateLiveDateTime() {
+      const now = new Date();
+
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      const formattedHours = String(hours).padStart(2, '0');
+      document.getElementById('liveClockDisplay').innerText = `🕒 ${formattedHours}:${minutes}:${seconds} ${ampm}`;
+
+      const dayName = days[now.getDay()];
+      const dateNum = now.getDate();
+      const monthName = months[now.getMonth()];
+      const yearNum = now.getFullYear();
+
+      document.getElementById('liveDateText').innerText = `📅 ${dayName}, ${dateNum} ${monthName} ${yearNum}`;
+    }
+    updateLiveDateTime();
+    setInterval(updateLiveDateTime, 1000);
+
+    let userCountryCode = 'BD';
+    let userLat = 23.8103;
+    let userLon = 90.4125;
+    let holidaysCache = {};
+
+    fetch('https://ipapi.co/json/')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.country_code) {
+          userCountryCode = data.country_code;
+          if (data.latitude && data.longitude) {
+            userLat = data.latitude;
+            userLon = data.longitude;
+          }
+        }
+      })
+      .catch(() => {
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        if (timeZone.includes('Dhaka')) userCountryCode = 'BD';
+        else if (timeZone.includes('Calcutta') || timeZone.includes('Kolkata')) userCountryCode = 'IN';
+        else if (timeZone.includes('New_York') || timeZone.includes('America')) userCountryCode = 'US';
+        else userCountryCode = 'BD';
+      });
+
+    async function getHolidayInfo(yearStr, dateStr) {
+      const cacheKey = `${userCountryCode}_${yearStr}`;
+      if (!holidaysCache[cacheKey]) {
+        try {
+          const res = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${yearStr}/${userCountryCode}`);
+          holidaysCache[cacheKey] = res.ok ? await res.json() : [];
+        } catch (e) {
+          holidaysCache[cacheKey] = [];
+        }
+      }
+      const matched = (holidaysCache[cacheKey] || []).find(h => h.date === dateStr);
+      return matched ? (matched.name || matched.localName) : null;
     }
 
-    const currentYear = new Date().getFullYear();
-    for (let y = currentYear; y <= currentYear + 50; y++) {
-      const li = document.createElement('li');
-      li.innerText = y;
-      li.onclick = () => { yearInput.value = y; closeAllLists(); };
-      yearList.appendChild(li);
+    async function evaluateSelectedDate() {
+      const val = dateInput.value;
+      const displayBox = document.getElementById('dateDisplayText');
+      const badge = document.getElementById('selectedStatusBadge');
+
+      if (!val) {
+        displayBox.innerText = '📅 Select Date...';
+        badge.style.display = 'none';
+        return;
+      }
+
+      const [yearStr, monthStr, dayStr] = val.split('-');
+      const selectedDate = new Date(parseInt(yearStr), parseInt(monthStr) - 1, parseInt(dayStr));
+      
+      const dayIndex = selectedDate.getDay();
+      const dayName = days[dayIndex];
+      const monthName = months[selectedDate.getMonth()];
+
+      displayBox.innerText = `📅 ${dayStr} ${monthName}, ${yearStr}`;
+
+      const holidayName = await getHolidayInfo(yearStr, val);
+      badge.style.display = 'block';
+
+      if (holidayName) {
+        badge.className = 'selected-status-badge status-holiday';
+        badge.innerText = `🎉 ${dayName} - Public Holiday (${holidayName}) 🏖️`;
+      } else {
+        const isWeekend = (userCountryCode === 'BD') 
+          ? (dayIndex === 5 || dayIndex === 6)
+          : (dayIndex === 0 || dayIndex === 6);
+
+        if (isWeekend) {
+          badge.className = 'selected-status-badge status-weekend';
+          badge.innerText = `🏖️ ${dayName} (Weekend / Off Day ✨)`;
+        } else {
+          badge.className = 'selected-status-badge status-working';
+          badge.innerText = `💼 ${dayName} (Working Day)`;
+        }
+      }
+
+      fetchWeatherForPlace();
     }
 
-    function toggleList(id) {
-      const target = document.getElementById(id);
-      const isOpen = target.classList.contains('open');
-      closeAllLists();
-      if (!isOpen) target.classList.add('open');
+    // Time Selection Handler: Shows Weather & Highlights Place Box
+    function handleTimeSelected() {
+      fetchWeatherForPlace();
+      
+      const placeField = document.getElementById('placeInput');
+      if (placeField.value.trim().length === 0) {
+        placeField.classList.add('highlight-place');
+        placeField.focus();
+      }
     }
 
-    function closeAllLists() {
-      document.querySelectorAll('.dropdown-list').forEach(el => el.classList.remove('open'));
+    // Remove Highlight once at least 1 character is entered
+    function handlePlaceInput() {
+      const placeField = document.getElementById('placeInput');
+      if (placeField.value.trim().length > 0) {
+        placeField.classList.remove('highlight-place');
+      }
+      fetchWeatherForPlace();
     }
 
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.custom-select-box')) closeAllLists();
-    });
+    // Weather Forecast & Smart Advice
+    async function fetchWeatherForPlace() {
+      const dateVal = dateInput.value;
+      const timeVal = document.getElementById('timeSelect').value;
+      const placeVal = document.getElementById('placeInput').value.trim();
+      const weatherCard = document.getElementById('weatherDetailCard');
 
-    function handleLimit(input, maxDigits) {
-      if (input.value.length > maxDigits) input.value = input.value.slice(0, maxDigits);
+      if (!dateVal || !timeVal) {
+        weatherCard.style.display = 'none';
+        return;
+      }
+
+      let targetLat = userLat;
+      let targetLon = userLon;
+
+      if (placeVal.length > 2) {
+        try {
+          const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(placeVal)}&count=1&language=en&format=json`);
+          if (geoRes.ok) {
+            const geoData = await geoRes.json();
+            if (geoData.results && geoData.results.length > 0) {
+              targetLat = geoData.results[0].latitude;
+              targetLon = geoData.results[0].longitude;
+            }
+          }
+        } catch (e) {}
+      }
+
+      try {
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${targetLat}&longitude=${targetLon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max,relative_humidity_2m_max&timezone=auto`);
+        if (res.ok) {
+          const data = await res.json();
+          const dates = data.daily.time || [];
+          const idx = dates.indexOf(dateVal);
+
+          weatherCard.style.display = 'block';
+
+          if (idx !== -1) {
+            const tempMax = Math.round(data.daily.temperature_2m_max[idx]);
+            const tempMin = Math.round(data.daily.temperature_2m_min[idx]);
+            const rainProb = data.daily.precipitation_probability_max[idx] || 0;
+            const wind = Math.round(data.daily.windspeed_10m_max[idx] || 10);
+            const humidity = data.daily.relative_humidity_2m_max ? data.daily.relative_humidity_2m_max[idx] : 60;
+            const code = data.daily.weathercode[idx];
+
+            let condition = "Sunny & Clear ☀️";
+            let tips = [];
+
+            if (rainProb >= 50 || (code >= 51 && code <= 67) || (code >= 80 && code <= 82)) {
+              condition = "Rain Expected 🌧️⛈️";
+              tips.push("☔ Carry an umbrella — high chance of rain!");
+            } else if (rainProb >= 25) {
+              condition = "Light Showers Possible 🌦️";
+              tips.push("🌂 Keep a pocket umbrella handy!");
+            } else if (code >= 1 && code <= 3) {
+              condition = "Partly Cloudy ⛅";
+            }
+
+            let tempStatus = "Pleasant & Mild 😊";
+            if (tempMax >= 34) {
+              tempStatus = "Very Hot 🔥";
+              tips.push("🎽 Wear light, breathable cotton clothes & stay hydrated!");
+            } else if (tempMin <= 16) {
+              tempStatus = "Chilly / Cold ❄️";
+              tips.push("🧥 Keep a warm jacket or stylish hoodie on!");
+            } else {
+              tips.push("✨ Perfect weather for a romantic date!");
+            }
+
+            if (timeVal.includes('PM') && parseInt(timeVal) >= 7) {
+              tips.push("🌙 Evening date vibe — breezy & cool!");
+            }
+
+            document.getElementById('weatherMainStatus').innerText = `Forecast: ${condition}`;
+            document.getElementById('weatherTempBadge').innerText = `🌡️ ${tempMin}°C - ${tempMax}°C`;
+            document.getElementById('rainStatus').innerText = `🌧️ Rain: ${rainProb}% Chance`;
+            document.getElementById('heatStatus').innerText = `🔥 Vibe: ${tempStatus}`;
+            document.getElementById('windStatus').innerText = `💨 Wind: ${wind} km/h`;
+            document.getElementById('cloudStatus').innerText = `💧 Humidity: ${humidity}%`;
+            document.getElementById('datingWeatherTip').innerText = `💡 Advice: ${tips.join(' ')}`;
+          } else {
+            document.getElementById('weatherMainStatus').innerText = `Forecast: Seasonal Outlook 🌤️`;
+            document.getElementById('weatherTempBadge').innerText = `🌡️ Favorable`;
+            document.getElementById('rainStatus').innerText = `🌧️ Rain: Moderate`;
+            document.getElementById('heatStatus').innerText = `🔥 Vibe: Comfortable`;
+            document.getElementById('windStatus').innerText = `💨 Wind: Calm`;
+            document.getElementById('cloudStatus').innerText = `💧 Humidity: Normal`;
+            document.getElementById('datingWeatherTip').innerText = `💡 Advice: Dress comfortably for your date at ${timeVal}! ✨`;
+          }
+        }
+      } catch (e) {
+        weatherCard.style.display = 'none';
+      }
+    }
+
+    // Populate 24-Hour 12-Hour Format Time Dropdown (Every 30 Minutes)
+    const timeSelect = document.getElementById('timeSelect');
+    for (let h = 0; h < 24; h++) {
+      for (let m = 0; m < 60; m += 30) {
+        let displayHours = h % 12;
+        displayHours = displayHours ? displayHours : 12;
+        const formattedH = String(displayHours).padStart(2, '0');
+        const formattedM = String(m).padStart(2, '0');
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        
+        const timeValue = `${formattedH}:${formattedM} ${ampm}`;
+        const option = document.createElement('option');
+        option.value = timeValue;
+        option.innerText = timeValue;
+        timeSelect.appendChild(option);
+      }
     }
 
     function showAlert(msg) {
@@ -336,44 +668,30 @@
     }
 
     function submitDate() {
-      let d = dayInput.value.trim();
-      let m = monthInput.value.trim();
-      let y = yearInput.value.trim();
-      const time = document.getElementById('timeSelect').value;
-      const place = placeInput.value.trim();
+      const dateVal = dateInput.value;
+      const time = timeSelect.value;
+      const place = document.getElementById('placeInput').value.trim();
 
-      if (!d || !m || !y || !time) {
-        showAlert('⚠️ Please complete Day, Month, Year & Time!');
-        return;
-      }
-
-      if (parseInt(d) < 1 || parseInt(d) > 31) {
-        showAlert('⚠️ Day must be between 01 and 31!');
-        return;
-      }
-      if (parseInt(m) < 1 || parseInt(m) > 12) {
-        showAlert('⚠️ Month must be between 01 and 12!');
-        return;
-      }
-      if (parseInt(y) < currentYear || y.length !== 4) {
-        showAlert(`⚠️ Year must be 4 digits (from ${currentYear})!`);
+      if (!dateVal || !time) {
+        showAlert('⚠️ Please pick Date and Time!');
         return;
       }
 
       if (place.length < 1) {
         showAlert('⚠️ Please enter where we are going!');
-        placeInput.focus();
+        const placeField = document.getElementById('placeInput');
+        placeField.classList.add('highlight-place');
+        placeField.focus();
         return;
       }
 
-      d = d.padStart(2, '0');
-      m = m.padStart(2, '0');
+      const [y, m, d] = dateVal.split('-');
+      const formattedDate = `${d}/${m}/${y}`;
 
-      localStorage.setItem('datingDate', `${d}/${m}/${y}`);
+      localStorage.setItem('datingDate', formattedDate);
       localStorage.setItem('datingTime', time);
       localStorage.setItem('datingPlace', place);
 
-      // Confetti burst before moving to page4
       confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
 
       setTimeout(() => {
