@@ -21,8 +21,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      overflow-x: hidden;
-      padding: 14px 10px 30px 10px;
+      padding: 12px 8px 24px 8px;
       position: relative;
     }
 
@@ -52,9 +51,9 @@
     .card {
       background-color: #ffffff;
       width: 100%;
-      max-width: 390px;
-      padding: 16px 14px;
-      border-radius: 22px;
+      max-width: 460px;
+      padding: 18px 14px;
+      border-radius: 24px;
       box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
       text-align: center;
       display: flex;
@@ -71,11 +70,11 @@
     }
 
     .image-container {
-      width: 95px;
-      height: 95px;
-      border-radius: 16px;
+      width: 90px;
+      height: 90px;
+      border-radius: 18px;
       overflow: hidden;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       border: 3px solid #f8bbd0;
       flex-shrink: 0;
     }
@@ -88,7 +87,7 @@
     }
 
     .title {
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       color: #ad1457;
       font-weight: 800;
       margin-bottom: 2px;
@@ -96,25 +95,48 @@
     }
 
     .subtitle {
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       color: #747d8c;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
-    /* 4x4 Balanced Responsive Grid */
+    /* Scrollable Food Container */
+    .food-grid-container {
+      width: 100%;
+      max-height: 360px;
+      overflow-y: auto;
+      padding: 4px 4px 6px 2px;
+      margin-bottom: 14px;
+    }
+
+    .food-grid-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .food-grid-container::-webkit-scrollbar-thumb {
+      background-color: #f8bbd0;
+      border-radius: 10px;
+    }
+
+    /* Fixed 4-Column Balanced Grid */
     .food-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
+      gap: 8px;
       width: 100%;
-      margin-bottom: 12px;
+    }
+
+    @media (max-width: 380px) {
+      .food-grid {
+        gap: 6px;
+      }
     }
 
     .food-card {
       background: #fffafc;
-      border: 1.5px solid #f8bbd0;
-      border-radius: 12px;
-      padding: 6px 2px;
+      border: 1.8px solid #f8bbd0;
+      border-radius: 14px;
+      padding: 8px 4px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -122,20 +144,21 @@
       cursor: pointer;
       transition: all 0.15s ease;
       user-select: none;
-      min-height: 52px;
+      min-height: 64px;
     }
 
     .food-emoji {
-      font-size: 1.35rem;
-      margin-bottom: 2px;
+      font-size: 1.55rem;
+      margin-bottom: 3px;
     }
 
     .food-name {
-      font-size: 0.65rem;
+      font-size: 0.72rem;
       font-weight: 700;
       color: #2f3542;
       text-align: center;
-      line-height: 1.1;
+      line-height: 1.15;
+      word-break: break-word;
     }
 
     .food-card:active {
@@ -145,30 +168,31 @@
     .food-card.selected {
       background-color: #fce4ec;
       border-color: #ec407a;
-      transform: scale(1.03);
-      box-shadow: 0 3px 8px rgba(236, 64, 122, 0.25);
+      transform: scale(1.04);
+      box-shadow: 0 4px 10px rgba(236, 64, 122, 0.25);
     }
 
     .food-card.selected .food-name {
       color: #ad1457;
+      font-weight: 800;
     }
 
     .btn-done {
       width: 100%;
-      background-color: #f48fb1;
+      background: linear-gradient(135deg, #ff4b72, #e81b54);
       color: white;
-      padding: 10px 18px;
-      font-size: 0.95rem;
+      padding: 12px 18px;
+      font-size: 1rem;
       font-weight: bold;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(244, 143, 177, 0.4);
+      box-shadow: 0 4px 14px rgba(232, 27, 84, 0.4);
       transition: all 0.2s ease;
     }
 
     .btn-done:hover {
-      background-color: #ec407a;
+      background: linear-gradient(135deg, #e81b54, #c2185b);
       transform: translateY(-2px);
     }
 
@@ -194,7 +218,6 @@
   <div class="toast-alert" id="topAlert">⚠️ Error Message</div>
 
   <div class="card" id="foodCard">
-    <!-- img4 Image Added Above Title -->
     <div class="image-container">
       <img src="image_folder/img4.jpg" alt="Vibes Picker" onerror="this.src='image_folder/img4.jpeg'" />
     </div>
@@ -202,74 +225,243 @@
     <div class="title">What are we feeling? 🍽️✨</div>
     <div class="subtitle">pick your vibes (select 1 or more)</div>
 
-    <!-- 16 Food & Drinks Options (4x4) -->
-    <div class="food-grid" id="foodGrid">
-      <div class="food-card" onclick="toggleFood(this, 'Pizza 🍕')">
-        <span class="food-emoji">🍕</span>
-        <span class="food-name">Pizza</span>
-      </div>
-      <div class="food-card" onclick="toggleFood(this, 'Sushi 🍣')">
-        <span class="food-emoji">🍣</span>
-        <span class="food-name">Sushi</span>
-      </div>
-      <div class="food-card" onclick="toggleFood(this, 'Burgers 🍔')">
-        <span class="food-emoji">🍔</span>
-        <span class="food-name">Burger</span>
-      </div>
-      <div class="food-card" onclick="toggleFood(this, 'Pasta 🍝')">
-        <span class="food-emoji">🍝</span>
-        <span class="food-name">Pasta</span>
-      </div>
+    <div class="food-grid-container">
+      <div class="food-grid" id="foodGrid">
+        <!-- Row 1 & 2: Fast Food (1-8) -->
+        <div class="food-card" onclick="toggleFood(this, 'Pizza 🍕')">
+          <span class="food-emoji">🍕</span>
+          <span class="food-name">Pizza</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Burger 🍔')">
+          <span class="food-emoji">🍔</span>
+          <span class="food-name">Burger</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Naga Wings 🍗')">
+          <span class="food-emoji">🍗</span>
+          <span class="food-name">Naga Wings</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'French Fries 🍟')">
+          <span class="food-emoji">🍟</span>
+          <span class="food-name">Fries</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Pasta 🍝')">
+          <span class="food-emoji">🍝</span>
+          <span class="food-name">Pasta</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Crispy Chix 🍖')">
+          <span class="food-emoji">🍖</span>
+          <span class="food-name">Crispy Chix</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Shawarma 🌯')">
+          <span class="food-emoji">🌯</span>
+          <span class="food-name">Shawarma</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Nachos 🧀')">
+          <span class="food-emoji">🧀</span>
+          <span class="food-name">Nachos</span>
+        </div>
 
-      <div class="food-card" onclick="toggleFood(this, 'Tacos 🌮')">
-        <span class="food-emoji">🌮</span>
-        <span class="food-name">Tacos</span>
-      </div>
-      <div class="food-card" onclick="toggleFood(this, 'Ramen 🍜')">
-        <span class="food-emoji">🍜</span>
-        <span class="food-name">Ramen</span>
-      </div>
-      <div class="food-card" onclick="toggleFood(this, 'Hot Coffee ☕')">
-        <span class="food-emoji">☕</span>
-        <span class="food-name">Hot Coffee</span>
-      </div>
-      <div class="food-card" onclick="toggleFood(this, 'Cold Coffee 🧋')">
-        <span class="food-emoji">🧋</span>
-        <span class="food-name">Cold Coffee</span>
-      </div>
+        <!-- Row 3: Special Vibe & Protection (9-12) -->
+        <div class="food-card" onclick="toggleFood(this, 'Hotel Room Date 🛏️')">
+          <span class="food-emoji">🛏️</span>
+          <span class="food-name">Room Date</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Durex Condom 🛡️')">
+          <span class="food-emoji">🛡️</span>
+          <span class="food-name">Durex</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Panther Condom 🐆')">
+          <span class="food-emoji">🐆</span>
+          <span class="food-name">Panther</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Cigarettes 🚬')">
+          <span class="food-emoji">🚬</span>
+          <span class="food-name">Cigarettes</span>
+        </div>
 
-      <div class="food-card" onclick="toggleFood(this, 'Milk Tea 🫖')">
-        <span class="food-emoji">🫖</span>
-        <span class="food-name">Milk Tea</span>
-      </div>
-      <div class="food-card" onclick="toggleFood(this, 'Cold Drink 🥤')">
-        <span class="food-emoji">🥤</span>
-        <span class="food-name">Cold Drink</span>
-      </div>
-      <div class="food-card" onclick="toggleFood(this, 'Lassi 🥛')">
-        <span class="food-emoji">🥛</span>
-        <span class="food-name">Lassi</span>
-      </div>
-      <div class="food-card" onclick="toggleFood(this, 'Ice Cream 🍨')">
-        <span class="food-emoji">🍨</span>
-        <span class="food-name">Ice Cream</span>
-      </div>
+        <!-- Row 4, 5 & 6: Continental & Asian (13-24) -->
+        <div class="food-card" onclick="toggleFood(this, 'Sandwich 🥪')">
+          <span class="food-emoji">🥪</span>
+          <span class="food-name">Sandwich</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Hot Dog 🌭')">
+          <span class="food-emoji">🌭</span>
+          <span class="food-name">Hot Dog</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Tacos 🌮')">
+          <span class="food-emoji">🌮</span>
+          <span class="food-name">Tacos</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Steak 🥩')">
+          <span class="food-emoji">🥩</span>
+          <span class="food-name">Steak</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Ramen 🍜')">
+          <span class="food-emoji">🍜</span>
+          <span class="food-name">Ramen</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Sushi 🍣')">
+          <span class="food-emoji">🍣</span>
+          <span class="food-name">Sushi</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Chowmein 🥢')">
+          <span class="food-emoji">🥢</span>
+          <span class="food-name">Chowmein</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Momos 🥟')">
+          <span class="food-emoji">🥟</span>
+          <span class="food-name">Momos</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Dosa 🥞')">
+          <span class="food-emoji">🥞</span>
+          <span class="food-name">Dosa</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Garlic Bread 🥖')">
+          <span class="food-emoji">🥖</span>
+          <span class="food-name">Garlic Bread</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'BBQ Grill 🍢')">
+          <span class="food-emoji">🍢</span>
+          <span class="food-name">BBQ Grill</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Hot Wings 🔥')">
+          <span class="food-emoji">🔥</span>
+          <span class="food-name">Hot Wings</span>
+        </div>
 
-      <div class="food-card" onclick="toggleFood(this, 'Biryani 🍗')">
-        <span class="food-emoji">🍗</span>
-        <span class="food-name">Biryani</span>
-      </div>
-      <div class="food-card" onclick="toggleFood(this, 'Dessert 🍰')">
-        <span class="food-emoji">🍰</span>
-        <span class="food-name">Dessert</span>
-      </div>
-      <div class="food-card" onclick="toggleFood(this, 'Waffles 🧇')">
-        <span class="food-emoji">🧇</span>
-        <span class="food-name">Waffles</span>
-      </div>
-      <div class="food-card" onclick="toggleFood(this, 'Fries 🍟')">
-        <span class="food-emoji">🍟</span>
-        <span class="food-name">Fries</span>
+        <!-- Row 7, 8 & 9: Bangla & Desi Bites (25-36) -->
+        <div class="food-card" onclick="toggleFood(this, 'Fuchka 🥣')">
+          <span class="food-emoji">🥣</span>
+          <span class="food-name">Fuchka</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Chotpoti 🍲')">
+          <span class="food-emoji">🍲</span>
+          <span class="food-name">Chotpoti</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Haleem 🥘')">
+          <span class="food-emoji">🥘</span>
+          <span class="food-name">Haleem</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Kacchi Biryani 🍚')">
+          <span class="food-emoji">🍚</span>
+          <span class="food-name">Kacchi</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Chicken Biryani 🍛')">
+          <span class="food-emoji">🍛</span>
+          <span class="food-name">Biryani</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Khichuri 🥣')">
+          <span class="food-emoji">🥣</span>
+          <span class="food-name">Khichuri</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Seekh Kebab 🍡')">
+          <span class="food-emoji">🍡</span>
+          <span class="food-name">Kebab</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Naan & Grill 🫓')">
+          <span class="food-emoji">🫓</span>
+          <span class="food-name">Naan & Grill</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Jhalmuri 🥡')">
+          <span class="food-emoji">🥡</span>
+          <span class="food-name">Jhalmuri</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Velpuri 🥙')">
+          <span class="food-emoji">🥙</span>
+          <span class="food-name">Velpuri</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Singara 🥐')">
+          <span class="food-emoji">🥐</span>
+          <span class="food-name">Singara</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Somosa 📐')">
+          <span class="food-emoji">📐</span>
+          <span class="food-name">Somosa</span>
+        </div>
+
+        <!-- Row 10 & 11: Desserts (37-44) -->
+        <div class="food-card" onclick="toggleFood(this, 'Ice Cream 🍨')">
+          <span class="food-emoji">🍨</span>
+          <span class="food-name">Ice Cream</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Waffles 🧇')">
+          <span class="food-emoji">🧇</span>
+          <span class="food-name">Waffles</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Brownie 🍫')">
+          <span class="food-emoji">🍫</span>
+          <span class="food-name">Brownie</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Cheesecake 🍰')">
+          <span class="food-emoji">🍰</span>
+          <span class="food-name">Cheesecake</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Pastry Cake 🎂')">
+          <span class="food-emoji">🎂</span>
+          <span class="food-name">Pastry</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Donuts 🍩')">
+          <span class="food-emoji">🍩</span>
+          <span class="food-name">Donuts</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Pancakes 🥞')">
+          <span class="food-emoji">🥞</span>
+          <span class="food-name">Pancakes</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Falooda 🍧')">
+          <span class="food-emoji">🍧</span>
+          <span class="food-name">Falooda</span>
+        </div>
+
+        <!-- Row 12, 13 & 14: Drinks & Beverages (45-56) - All Distinct Icons -->
+        <div class="food-card" onclick="toggleFood(this, 'Cold Coffee 🧋')">
+          <span class="food-emoji">🧋</span>
+          <span class="food-name">Cold Coffee</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Hot Coffee ☕')">
+          <span class="food-emoji">☕</span>
+          <span class="food-name">Hot Coffee</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Dudh Cha 🫖')">
+          <span class="food-emoji">🫖</span>
+          <span class="food-name">Dudh Cha</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Malai Cha 🍵')">
+          <span class="food-emoji">🍵</span>
+          <span class="food-name">Malai Cha</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Milkshake 🥤')">
+          <span class="food-emoji">🥤</span>
+          <span class="food-name">Milkshake</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Hot Chocolate 🍮')">
+          <span class="food-emoji">🍮</span>
+          <span class="food-name">Hot Choco</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Mango Lassi 🥛')">
+          <span class="food-emoji">🥛</span>
+          <span class="food-name">Lassi</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Fresh Juice 🍹')">
+          <span class="food-emoji">🍹</span>
+          <span class="food-name">Juice</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Mojito 🍸')">
+          <span class="food-emoji">🍸</span>
+          <span class="food-name">Mojito</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Energy Drink ⚡')">
+          <span class="food-emoji">⚡</span>
+          <span class="food-name">Energy Drink</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Lemonade 🍋')">
+          <span class="food-emoji">🍋</span>
+          <span class="food-name">Lemonade</span>
+        </div>
+        <div class="food-card" onclick="toggleFood(this, 'Cold Drink 🍾')">
+          <span class="food-emoji">🍾</span>
+          <span class="food-name">Cold Drink</span>
+        </div>
       </div>
     </div>
 
@@ -279,7 +471,7 @@
   <div class="footer">Designed & Developed by PRANTO</div>
 
   <script>
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXvf-yZYeFd4NYQ22W75vLpKF7XO2z4tqTu_rSMJWsRkj5D4oY5yY5XqLpTcgMHIRc9Q/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4QaGGinbuO6FSTD54Kd_HsYq65mFYgsKU-zMqzrDYcWfQuIun8f3UU0nxvZNfCO6G/exec';
     let selectedFoods = [];
 
     function showAlert(msg) {
@@ -301,7 +493,7 @@
 
     function submitFinalData() {
       if (selectedFoods.length === 0) {
-        showAlert('⚠️ Please select at least 1 food or drink vibe!');
+        showAlert('⚠️ Please select at least 1 vibe!');
         return;
       }
 
@@ -314,7 +506,7 @@
       const date = localStorage.getItem('datingDate') || 'TBD';
       const time = localStorage.getItem('datingTime') || 'TBD';
       const place = localStorage.getItem('datingPlace') || 'TBD';
-      const email = localStorage.getItem('receiverEmail') || 'golamzelane009@gmail.com';
+      const email = localStorage.getItem('receiverEmail') || '';
       const foodText = selectedFoods.join(', ');
 
       localStorage.setItem('datingFood', foodText);
