@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wait... Really?! 😭</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Wait... Really?! 😭💖</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     * {
@@ -11,38 +11,44 @@
       padding: 0;
       box-sizing: border-box;
       font-family: 'Segoe UI', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     body {
-      background-color: #fce4ec;
+      background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
       min-height: 100vh;
+      width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
-      padding: 15px;
+      overflow-x: hidden;
+      padding: 16px 12px 35px 12px;
       position: relative;
     }
 
     .card {
       background-color: #ffffff;
       width: 100%;
-      max-width: 420px;
-      padding: 35px 25px;
+      max-width: 400px;
+      padding: 30px 22px;
       border-radius: 28px;
-      box-shadow: 0 10px 25px rgba(255, 105, 180, 0.15);
+      box-shadow: 0 12px 35px rgba(233, 30, 99, 0.2);
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      animation: popIn 0.5s ease-out forwards;
+      position: relative;
+      animation: popIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      margin: auto;
+      border: 2px solid #fce4ec;
     }
 
     @keyframes popIn {
       0% {
         opacity: 0;
-        transform: scale(0.85);
+        transform: scale(0.88);
       }
       100% {
         opacity: 1;
@@ -51,12 +57,14 @@
     }
 
     .image-container {
-      width: 140px;
-      height: 140px;
+      width: 130px;
+      height: 130px;
       border-radius: 22px;
       overflow: hidden;
-      margin-bottom: 20px;
-      border: 3px solid #f8bbd0;
+      margin-bottom: 16px;
+      border: 3.5px solid #f48fb1;
+      box-shadow: 0 6px 18px rgba(244, 143, 177, 0.35);
+      flex-shrink: 0;
     }
 
     .image-container img {
@@ -66,71 +74,66 @@
       display: block;
     }
 
-    .title {
-      font-size: 1.35rem;
+    .badge {
+      background: #fce4ec;
       color: #ad1457;
+      font-size: 0.75rem;
       font-weight: 800;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: 1px solid #f8bbd0;
+    }
+
+    .title {
+      font-size: 1.32rem;
+      color: #ad1457;
+      font-weight: 900;
       margin-bottom: 8px;
-      letter-spacing: 0.5px;
       line-height: 1.3;
     }
 
     .subtitle {
-      font-size: 0.95rem;
-      color: #636e72;
-      margin-bottom: 25px;
-      font-weight: 500;
+      font-size: 0.88rem;
+      color: #4b5563;
+      margin-bottom: 22px;
+      line-height: 1.5;
+      font-weight: 600;
+      padding: 0 6px;
     }
 
     .btn-okay {
-      background-color: #ec407a;
+      width: 100%;
+      background: linear-gradient(135deg, #ff4b72, #e81b54);
       color: white;
-      padding: 12px 32px;
-      font-size: 1rem;
-      font-weight: bold;
+      padding: 12px 24px;
+      font-size: 0.96rem;
+      font-weight: 800;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(236, 64, 122, 0.35);
-      transition: transform 0.2s ease, background-color 0.2s;
+      box-shadow: 0 4px 14px rgba(232, 27, 84, 0.35);
+      transition: all 0.2s ease;
+      letter-spacing: 0.3px;
     }
 
     .btn-okay:hover {
-      background-color: #d81b60;
-      transform: scale(1.05);
+      background: linear-gradient(135deg, #e81b54, #c2185b);
+      transform: translateY(-2px);
     }
 
     .footer {
       position: fixed;
-      bottom: 12px;
-      font-size: 0.85rem;
+      bottom: 8px;
+      font-size: 0.72rem;
       color: #c2185b;
       opacity: 0.75;
       user-select: none;
-    }
-
-    @media (max-width: 480px) {
-      .card {
-        padding: 25px 20px;
-      }
-      .title {
-        font-size: 1.15rem;
-      }
-      .subtitle {
-        font-size: 0.85rem;
-      }
-      .image-container {
-        width: 120px;
-        height: 120px;
-      }
-      .btn-okay {
-        padding: 10px 26px;
-        font-size: 0.9rem;
-      }
-      .footer {
-        font-size: 0.75rem;
-        bottom: 8px;
-      }
+      text-align: center;
+      width: 100%;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -141,24 +144,185 @@
       <img src="image_folder/img2.jpg" alt="Surprised Image" onerror="this.src='image_folder/img2.jpeg'" />
     </div>
 
-    <div class="title">
-      WAIT YOU ACTUALLY<br>SAID YES?? 😭
+    <div class="badge" id="reactionBadge">Reaction ✨</div>
+
+    <div class="title" id="pageTitle">
+      WAIT YOU ACTUALLY<br>SAID YES?? 😭💖
     </div>
 
-    <div class="subtitle">
+    <div class="subtitle" id="pageSubtitle">
       i was so ready for you to say no 😜
     </div>
 
     <button class="btn-okay" onclick="nextPage()">
-      okay okay! ➔
+      okay okay! let's plan ➔ 💕
     </button>
   </div>
 
-  <div class="footer">
-    Designed & Developed by PRANTO
-  </div>
+  <div class="footer">Designed & Developed by PRANTO</div>
 
   <script>
+    // 30 Random Joyful, Sweet & Funny Reactions for saying YES
+    const reactions = [
+      {
+        badge: "OMG YES! 🥳",
+        title: "WAIT... REALLY?! 😭💖",
+        sub: "I was secretly preparing for rejection, you just made my whole year! 🥺✨"
+      },
+      {
+        badge: "Mission Accomplished 🎯",
+        title: "YOU SAID YES! 🎉💘",
+        sub: "I literally did a mini victory dance in my room right now! 🕺💃"
+      },
+      {
+        badge: "Best Decision Ever 🏆",
+        title: "BEST. NEWS. TODAY! 🌟",
+        sub: "My smile is so wide right now, you have no idea! Let's make it unforgettable. 🥰"
+      },
+      {
+        badge: "Heart Melting 🥹",
+        title: "ARE YOU SERIOUS?! 💕",
+        sub: "You just made my heart skip like 10 beats in a second! ✨"
+      },
+      {
+        badge: "Pinch Me 🙈",
+        title: "AM I DREAMING?! 🌈",
+        sub: "Somebody please pinch me, I can't believe this just happened! 💫"
+      },
+      {
+        badge: "VIP Approved 👑",
+        title: "YAYYY! IT'S HAPPENING! 🥳",
+        sub: "I promise to be the coolest, most fun date you've ever had! 🍕✨"
+      },
+      {
+        badge: "No Takebacks 🔒",
+        title: "NO TAKING IT BACK! 🔒💖",
+        sub: "It's screenshot, notarized, and locked in history now! 😉🌹"
+      },
+      {
+        badge: "Pure Happiness 🌸",
+        title: "MY HEART JUST EXPLODED 💥💕",
+        sub: "You have no idea how much this simple 'yes' means to me! 🥺✨"
+      },
+      {
+        badge: "Date Official 🎟️",
+        title: "WE'RE ACTUALLY GOING! 🥂",
+        sub: "Now I gotta pick my best outfit and look presentable! 👔👗"
+      },
+      {
+        badge: "Certified Cutie 🍓",
+        title: "YOU JUST MADE MY DAY! 💌",
+        sub: "100% happiness unlocked! Getting everything ready for us right now. 🎀"
+      },
+      {
+        badge: "Victory Dance 🕺",
+        title: "HECK YESSS! 🎊✨",
+        sub: "I knew you had exquisite taste in people! 😉 Let's make it epic! 🚀"
+      },
+      {
+        badge: "Sweetest Surprise 🍯",
+        title: "YOU ACTUALLY AGREED?! 🥺",
+        sub: "I was holding my breath the entire time... time to exhale! 💖"
+      },
+      {
+        badge: "Butterflies Activated 🦋",
+        title: "SO MANY BUTTERFLIES! 🦋💕",
+        sub: "My stomach is doing flips in the happiest way possible right now! ✨"
+      },
+      {
+        badge: "Top Tier Choice 🌟",
+        title: "BEST ANSWER IN THE WORLD! 🥇",
+        sub: "You definitely won't regret this, I promise plenty of laughs and good food! 🥞"
+      },
+      {
+        badge: "Golden Ticket 🎫",
+        title: "YOU'RE THE SWEETEST! 🥰",
+        sub: "Thank you for saying yes, you made this whole effort totally worth it! 🌹"
+      },
+      {
+        badge: "Big Smile Mode 😁",
+        title: "SMILING EAR TO EAR! 🙈💖",
+        sub: "Can't stop smiling at my screen like a complete fool right now! ✨"
+      },
+      {
+        badge: "Ready For Fun 🎡",
+        title: "LET THE COUNTDOWN BEGIN! ⏳",
+        sub: "I'm already counting down the hours until I get to hang out with you! 🎈"
+      },
+      {
+        badge: "Super Excited 🚀",
+        title: "WE HAVE A DATE! 🥳🥂",
+        sub: "Hold on, let me calm my excitement down for a second... okay, let's plan! 💃"
+      },
+      {
+        badge: "100% Genuine 💕",
+        title: "YOU JUST MADE ME SO HAPPY! 🌸",
+        sub: "Seriously, this just turned my entire week around in a second! ✨"
+      },
+      {
+        badge: "Smooth Operator 😎",
+        title: "A MATCH MADE IN HEAVEN! 💫",
+        sub: "I knew asking you out was the best decision of the century! 🍕💖"
+      },
+      {
+        badge: "Party Mode 🪩",
+        title: "CONFETTI TIME! 🎉💖",
+        sub: "Cue the romantic background music, we officially have a date! 🎶✨"
+      },
+      {
+        badge: "Aww Moment 🥺",
+        title: "I'M SO GLAD YOU SAID YES! 💖",
+        sub: "I promise to make you laugh until your cheeks hurt! 😂🌹"
+      },
+      {
+        badge: "Achievement Unlocked 🏆",
+        title: "SUCCESS LEVEL 100! 🎮💖",
+        sub: "The hardest part is done, now comes the fun planning! 🍿✨"
+      },
+      {
+        badge: "Warm & Fuzzy ☕",
+        title: "FEELING SO BLESSED! 🌟",
+        sub: "Getting to spend time with you is honestly the best treat ever! 🍰"
+      },
+      {
+        badge: "No Escape Now 😜",
+        title: "OFFICIALLY BOOKED! 📅💕",
+        sub: "Your calendar has been officially claimed for a fun adventure! ✨"
+      },
+      {
+        badge: "Heart Flutters 💓",
+        title: "CAN'T WAIT TO SEE YOU! 🌹",
+        sub: "My energy just went from 10% to 1000% instantly! ⚡💖"
+      },
+      {
+        badge: "High Five ✋",
+        title: "WOOHOO! HIGH FIVE! 🥳",
+        sub: "We are going to have the absolute sweetest time together! 🍧✨"
+      },
+      {
+        badge: "Cute Connection 💌",
+        title: "YOU'RE AMAZING! 💫",
+        sub: "Thank you for making this so easy and fun! Let's pick a date and place! 📍"
+      },
+      {
+        badge: "Endless Vibes 🌌",
+        title: "LET'S MAKE MEMORIES! 📸✨",
+        sub: "Get ready for good vibes, great conversations, and lots of smiles! 🌷"
+      },
+      {
+        badge: "Pure Joy ✨",
+        title: "YAYAYAY! IT'S ON! 💖",
+        sub: "I was so ready for you to say no, but you made magic happen! 🪄🥰"
+      }
+    ];
+
+    // Pick 1 of 30 random reactions on page load
+    const randomChoice = reactions[Math.floor(Math.random() * reactions.length)];
+    document.getElementById('reactionBadge').innerText = randomChoice.badge;
+    document.getElementById('pageTitle').innerHTML = randomChoice.title;
+    document.getElementById('pageSubtitle').innerText = randomChoice.sub;
+
+    // Celebration Confetti
     window.addEventListener('DOMContentLoaded', () => {
       const duration = 2.5 * 1000;
       const animationEnd = Date.now() + duration;
@@ -168,13 +332,13 @@
           particleCount: 3,
           angle: 60,
           spread: 55,
-          origin: { x: 0, y: 0 }
+          origin: { x: 0, y: 0.6 }
         });
         confetti({
           particleCount: 3,
           angle: 120,
           spread: 55,
-          origin: { x: 1, y: 0 }
+          origin: { x: 1, y: 0.6 }
         });
 
         if (Date.now() < animationEnd) {
@@ -185,7 +349,6 @@
       frame();
     });
 
-    // OKAY OKAY বাটনে ক্লিক করলে page3.html এ যাবে
     function nextPage() {
       window.location.href = 'page3.html';
     }
